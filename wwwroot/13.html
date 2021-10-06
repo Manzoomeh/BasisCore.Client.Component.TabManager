@@ -1,0 +1,42 @@
+<basis core="dbsource" source="fingerfoodapi" name="db" run="atclient" cache="refresh">
+    <member request="supplier_list" type="list" name="supplier_list1" preview=""></member>
+</basis>
+
+<div class="supplier_resize">
+<basis core="component.bc.grid" run="atclient" datamembername="db.supplier_list1" 
+options-object="optionsGrid123"></basis>
+</div>
+
+    <script>
+ 
+        const optionsGrid123 = {
+             columns: {
+                 rownumber : "ردیف" , 
+                 id: {
+                     title: "کد تامین‌کننده",
+                     
+                 },
+                 title: {
+                     title: "عنوان",
+                     sort : true                        
+                 },
+                 phone: "شماره تماس",
+                 action: {
+          cellMaker: (row, data, td) =>
+            `<a onclick="getSupplierId(this,${row.id})">edit</a>`,
+          sort: false
+        }
+
+             },
+             
+             defaultSort:false,
+             pageSize: [20]
+         };
+         
+     function getSupplierId(e,id){
+         console.log(id.toString())
+         $bc.setSource("db.supplierid" , id.toString())
+     }
+      
+     
+ </script>

@@ -1,0 +1,49 @@
+
+
+<script src="https://cdn.basiscore.net/_js/basiscore-2.3.0.min.js"></script>
+<script src="https://cdn.basiscore.net/_js/alasql.min.js"></script>
+
+<basis core="component.bc.tabManager" run="atclient" options="mySetting" > </basis>
+<div class="clr"></div>
+
+<script>
+    const host = {
+        settings: {
+        'connection.web.callcommand':'http://localhost:3000/',
+        'connection.web.fingerfoodapi': 'https://dbsource.basiscore.net/data.json',
+        'connection.web.trust_loginuiapi': 'https://dbsource.basiscore.net/data.json',
+        'connection.web.basiscoreapi': 'https://dbsource.basiscore.net/data.json',
+        'connection.web.accountingapi': 'https://dbsource.basiscore.net/data.json',
+        'default.dbsource.verb': 'post',
+        'default.call.verb':'get',
+        'default.dmnid': '4235',
+    },
+        repositories: {
+            "bc.tabManager": "/basiscore.tabManager.js",
+            "bc.grid": "/basiscore.grid.component.js"
+        }
+
+    }
+    var mySetting = [
+		{
+            "title":"لیست تامین‌کننده",
+			"widgetId":13,
+			"active" : true,
+            "triggers":[]
+		},
+		{
+            "title":"نمایش تامین کننده",
+			"widgetId":12,
+			"active" : false,
+            "triggers":["list.search"]
+		},
+		{
+            "title":"تقویم",
+			"widgetId":11,
+			"active" : false,
+            "triggers" :["list.search1"]
+		}
+	]
+</script>
+
+

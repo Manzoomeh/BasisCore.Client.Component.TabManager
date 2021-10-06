@@ -1,0 +1,51 @@
+
+
+<script src="https://cdn.basiscore.net/_js/basiscore-2.3.0.min.js"></script>
+<script src="https://cdn.basiscore.net/_js/alasql.min.js"></script>
+
+<style>
+	[bc-tab-header-wrapper]{display: flex;
+position: relative;
+top: -40px;
+background: #fff;
+height: 35px;width: 80%;}
+
+[data-bc-widget-inner-container]{overflow-y: scroll !important;}
+</style>
+<basis core="component.bc.tabManager" run="atclient" options="mySetting111" > </basis>
+<div class="clr"></div>
+
+<script>
+const host = {
+        settings: {
+        'connection.web.callcommand':'http://localhost:3000/',
+        'connection.web.fingerfoodapi': 'https://dbsource.basiscore.net/data.json',
+        'connection.web.trust_loginuiapi': 'https://dbsource.basiscore.net/data.json',
+        'connection.web.basiscoreapi': 'https://dbsource.basiscore.net/data.json',
+        'connection.web.accountingapi': 'https://dbsource.basiscore.net/data.json',
+        'default.dbsource.verb': 'post',
+        'default.call.verb':'get',
+        'default.dmnid': '4235',
+    },
+        repositories: {
+            "bc.tabManager": "/basiscore.tabManager.js",
+            "bc.grid": "/basiscore.grid.component.js"
+        }
+
+    }
+    var mySetting111 = [
+		{
+            "title":"لیست تامین‌کننده",
+			"widgetId":13,
+			"active" : true,
+            "triggers":[]
+		},
+		{
+            "title":"نمایش تامین کننده",
+			"widgetId":14,
+			"active" : false,
+            "triggers":["db.supplierid"]
+		}
+	
+	]
+</script>
