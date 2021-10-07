@@ -11,6 +11,7 @@ interface ITabOptions {
 }
 export default class TabComponent extends BasisPanelChildComponent {
     public tabComponentOptions : ITabOptions[]
+    public tabsSettings : object;
     protected activeComponent : Element
     protected activeHeader : Element
     protected tabNodes : Element[] =[]
@@ -63,13 +64,15 @@ export default class TabComponent extends BasisPanelChildComponent {
             this.activeHeader.remove()
             this.activeTab(this.tabNodes[0])  
           });
-        span.addEventListener("click", (e) => {            
-        this.tabNodes.map(x => {
-            const componentId = x.getAttribute("component-id")           
-            if (id == parseInt(componentId)){
-                this.activeTab(x)  
-            }
-        })
+        span.addEventListener("click", (e) => { 
+            const headerElement = e.target  as HTMLInputElement
+            const headerId = headerElement.getAttribute("data-id")                 
+            this.tabNodes.map(x => {                
+                const componentId = x.getAttribute("component-id")           
+                if (parseInt(headerId) == parseInt(componentId)){
+                    this.activeTab(x)  
+                }
+            })
         });
         return header
     }
@@ -87,7 +90,7 @@ export default class TabComponent extends BasisPanelChildComponent {
         })
         this.activeComponent.setAttribute("bc-tab-active-component" , "true")
         //const nodes= Array.from(this.container.childNodes)
-        //this.owner.setContent(this.container);       
+        //this.owner.setContent(this.container);    
         await this.owner.processNodesAsync([activeComponent]);
         
        
@@ -101,7 +104,6 @@ export default class TabComponent extends BasisPanelChildComponent {
     }
     async runAsync(source?): Promise<any> {  
         if(!this.firstTabInitialize ){
-            console.log("first tab")
             await this.createBody()
             this.firstTabInitialize = true
         }
@@ -109,11 +111,18 @@ export default class TabComponent extends BasisPanelChildComponent {
             const componentId = Math.floor(Math.random() * 10000)    
             const activeTab = this.tabComponentOptions.find(element => element.triggers.find(element1 => element1 == source._id) );
             this.headerWrapper.appendChild(this.createHeader(activeTab.title ,componentId))
-            let basisTag = document.createElement("basis")
+            const basisOptions = `{"settings": {"connection.web.fingerfoodapi": "https://dbsource.basiscore.net/data.json"}}`
+            let groupElement  =document.createElement("basis")
+            groupElement.setAttribute("core","group")
+            groupElement.setAttribute("run","atclient")
+            let tabSettings : string = `${this.tabsSettings}`
+            groupElement.setAttribute("options" , JSON.stringify(tabSettings)  )
+            let basisTag = document.createElement("basis")            
             basisTag.setAttribute("core","call")
             basisTag.setAttribute("file" ,`${activeTab.widgetId}.html` )
-            basisTag.setAttribute("run","atclient")       
-            await this.initializeComponent(basisTag , componentId)     
+            basisTag.setAttribute("run","atclient")   
+            groupElement.appendChild(basisTag)   
+            await this.initializeComponent(groupElement , componentId)     
         }
                  
         return true
@@ -123,7 +132,8 @@ export default class TabComponent extends BasisPanelChildComponent {
         const settingObject = await this.owner.getAttributeValueAsync(
             "options"
           );
-        this.tabComponentOptions  = eval(settingObject);
+        this.tabComponentOptions  = eval(settingObject).tabs;
+        this.tabsSettings = eval(settingObject).settings
         
       
     } 

@@ -1,3 +1,4 @@
+
 <style>
     .no_details {
         width: 100%;
@@ -58,10 +59,11 @@
 
 
     <basis core="dbsource" source="fingerfoodapi" name="db" run="atclient" cache="refresh" 
-    usedforid="[##db.supplierid.value|(0)##]" triggers="list.search" >
+    usedforid="[##list.search.value|(0)##]"  >
         <member request="view_supplier" type="view" name="view_supplier" sort="qid desc" ></member>
     </basis>
 <div class="widget_body">
+    
 <basis core="print" datamembername="db.view_supplier" run="atclient">
     <else-layout>
         <script type="text/template">
