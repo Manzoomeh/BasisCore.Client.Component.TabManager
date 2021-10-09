@@ -23,7 +23,7 @@ export default class TabComponent extends BasisPanelChildComponent {
       
     }
     async createBody():Promise<void>{
-        
+        //comment this
         let triggersArray : string[]= []
         const firstTab = this.tabComponentOptions.find(element => element.active == true);
         const componentId = Math.floor(Math.random() * 10000) 
