@@ -51,6 +51,7 @@ export default class TabComponent extends BasisPanelChildComponent {
         const span = document.createElement("span")
         header.setAttribute("bc-tab-header" , "")
         span.setAttribute("data-id" ,  id.toString())
+        closeBtn.setAttribute("data-id" ,  id.toString())
         span.textContent = headerText        
         closeBtn.textContent = "x"
         closeBtn.setAttribute("bc-tab-close-button" , "")
@@ -60,6 +61,16 @@ export default class TabComponent extends BasisPanelChildComponent {
         }
         this.activeHeader = header
         closeBtn.addEventListener("click", (e) => {
+            const closeElement =  e.target  as HTMLInputElement
+            const headerElement = closeElement.getAttribute("data-id")         
+            const header = closeElement.parentElement
+            this.tabNodes.map(x => {
+                let dataId = x.getAttribute("data-id")
+                if(parseInt(dataId) == parseInt(headerElement)){
+                    this.activeComponent = x
+                    this.activeHeader = header
+                }
+            })
             this.activeComponent.remove()
             this.activeHeader.remove()
             this.activeTab(this.tabNodes[0])  
@@ -111,16 +122,16 @@ export default class TabComponent extends BasisPanelChildComponent {
             const componentId = Math.floor(Math.random() * 10000)    
             const activeTab = this.tabComponentOptions.find(element => element.triggers.find(element1 => element1 == source._id) );
             this.headerWrapper.appendChild(this.createHeader(activeTab.title ,componentId))
-            const basisOptions = `{"settings": {"connection.web.fingerfoodapi": "https://dbsource.basiscore.net/data.json"}}`
+            const basisOptions = `{"settings": {"connection.web.fingerfoodapii": "https://dbsource.basiscore.net/data.json"}}`
             let groupElement  =document.createElement("basis")
             groupElement.setAttribute("core","group")
             groupElement.setAttribute("run","atclient")
             let tabSettings : string = `${this.tabsSettings}`
-            groupElement.setAttribute("options" , JSON.stringify(tabSettings)  )
+            groupElement.setAttribute("options" , JSON.stringify(basisOptions)  )
             let basisTag = document.createElement("basis")            
             basisTag.setAttribute("core","call")
             basisTag.setAttribute("file" ,`${activeTab.widgetId}.html` )
-            basisTag.setAttribute("run","atclient")   
+            basisTag.setAttribute("run","atclient")           
             groupElement.appendChild(basisTag)   
             await this.initializeComponent(groupElement , componentId)     
         }
@@ -133,8 +144,7 @@ export default class TabComponent extends BasisPanelChildComponent {
             "options"
           );
         this.tabComponentOptions  = eval(settingObject).tabs;
-        this.tabsSettings = eval(settingObject).settings
-        
+        this.tabsSettings = eval(settingObject).tabSettings
       
     } 
     public async initializeAsync():  Promise<void> {

@@ -63,103 +63,10 @@
         <member request="view_supplier" type="view" name="view_supplier" sort="qid desc" ></member>
     </basis>
 <div class="widget_body">
-    
-<basis core="print" datamembername="db.view_supplier" run="atclient">
-    <else-layout>
-        <script type="text/template">
-            <div class="no_details">
-                <p>برای مشاهده جزییات یک تامین‌کننده بر روی ویرایش کلیک کنید
-                </p>
-
-                <img src="asset/widget/fingerfood/images/ezgif-2-2f73ec3edd09.gif"/>
-
-            </div>
-        </script>
-    </else-layout>
-    <layout>
-        <script type="text/template">
-            <table id="fg-ctl-2" fg-prp-id="1" class="fg-answers">
-                @child
-            </table>
-        </script>
-    </layout>
-    <face filter="qid == 1">
-        <script type="text/template">
-            <tr class="fg-property">
-                <td data-prp-id="2" class="fg-property-title">
-                    <span>نام و نام‌خانوادگی</span>
-                </td>
-                <td class="fg-answers-container" style="">
-                    <table id="fg-ctl-5" fg-prp-id="2" class="fg-answers">
-                        <tr class="fg-answer fg-answer-ctl">
-                            <td><input type="text" value="@answer@" class="fg-part fg-part-ctl CSS_128 fg_validator_qPrpId2_order3"/>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-
-            </tr>
-        </script>
-    </face>
-    <face filter="qid == 2">
-        <script type="text/template">
-            <tr class="fg-property">
-                <td data-prp-id="2" class="fg-property-title">
-                    <span>نام برند
-                    </span>
-                </td>
-                <td class="fg-answers-container" style="">
-                    <table id="fg-ctl-5" fg-prp-id="2" class="fg-answers">
-                        <tr class="fg-answer fg-answer-ctl">
-                            <td><input type="text" value="@answer@"/>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-
-            </tr>
-        </script>
-    </face>
-    <face filter="qid == 3">
-        <script type="text/template">
-            <tr class="fg-property">
-                <td data-prp-id="2" class="fg-property-title">
-                    <span>
-                        شماره تماس
-                    </span>
-                </td>
-                <td class="fg-answers-container" style="">
-                    <table id="fg-ctl-5" fg-prp-id="2" class="fg-answers">
-                        <tr class="fg-answer fg-answer-ctl">
-                            <td><input type="text" value="@answer@"/>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-
-            </tr>
-        </script>
-    </face>
-    <face filter="qid == 5">
-        <script type="text/template">
-            <tr class="fg-property">
-                <td data-prp-id="2" class="fg-property-title">
-                    <span>
-                        آدرس</span>
-                </td>
-                <td class="fg-answers-container" style="">
-                    <table id="fg-ctl-5" fg-prp-id="2" class="fg-answers">
-                        <tr class="fg-answer fg-answer-ctl">
-                            <td>
-                                <textarea value="@answer@"></textarea>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-
-            </tr>
-        </script>
-    </face>
-</basis>
+    <Basis core="component.bc.grid" run="atclient" datamembername="db.view_supplier" 
+    options-object="supplierAccessoriesGrid"></Basis>
 </div>
 
+<script>
+
+</script>
