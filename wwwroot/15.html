@@ -1,0 +1,71 @@
+
+<style>
+    .no_details {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 15px;
+        flex-direction: column;
+        box-sizing: border-box;
+    }
+    .no_details img {
+        box-shadow: 0 0 3px #ececec;
+    }
+    .no_details p {
+        padding-bottom: 15px;
+    }
+
+    .fg-answer input[type="text"],
+    .fg-answer input[type="password"],
+    .fg-answer input[type="email"],
+    .fg-answer input[type="url"],
+    .fg-answer input[type="number"],
+    .fg-answer input[type="search"],
+    .fg-answer input[type="tel"],
+    .fg-answer input[type="color"],
+    .fg-answer input[type="file"],
+    .fg-answer select,
+    .fg-answer textarea {
+        width: 100%;
+        display: inline-block;
+        border-radius: 3px;
+        padding: 5px;
+        font-size: 12px;
+        box-sizing: border-box;
+        color: var(--dark_gray);
+        background: var(--vlight_blue);
+        border: 1px solid var(--light_blue);
+        border-radius: 3px;
+        transition: border 0.3s linear 0s;
+        margin: 5px 0 ;
+        
+    }
+    .fg-answer textarea{height: 100px;}
+    .fg-property-title {
+        min-height: 20px;
+        display: inline-block;
+        width: 100%;
+    }
+    .fg-answers-container {
+        width: 60%;
+    }
+    .fg-answers {
+        width: 100%;
+    }
+</style>
+<script src="https://cdn.basiscore.net/_js/alasql.min.js"></script>
+
+
+<basis core="dbsource" source="fingerfoodapi" name="db" run="atclient" cache="refresh" sid="[##list.search1.value##]">
+	<member request="supplier_calendar" type="list" name="supplier_calendar" preview="true"></member>
+</basis>
+<div class="widget_body">
+    <Basis core="component.bc.grid" run="atclient" datamembername="db.supplier_calendar" 
+    options-object="supplierCalendarGrid"></Basis>
+</div>
+
+<script>
+
+</script>

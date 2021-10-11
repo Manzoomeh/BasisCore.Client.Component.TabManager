@@ -4,11 +4,8 @@
 <script src="https://cdn.basiscore.net/_js/alasql.min.js"></script>
 
 <style>
-	[bc-tab-header-wrapper]{display: flex;
-position: relative;
-
-background: #fff;
-height: 35px;width: 80%;}
+	[bc-tab-header-wrapper]{display: flex;position: relative;
+background: #fff;height: 35px;width: 80%;}
 
 [data-bc-widget-inner-container]{overflow-y: scroll !important;}
 </style>
@@ -43,10 +40,16 @@ const host = {
             "triggers":[]
 		},
 		{
-            "title":"نمایش تامین کننده",
+            "title":"1نمایش تامین کننده",
 			"widgetId":14,
 			"active" : false,
             "triggers":["list.search"]
+		},
+        {
+            "title":"2نمایش تامین کننده",
+			"widgetId":15,
+			"active" : false,
+            "triggers":["list.search1"]
 		}
 	
 	]

@@ -64,16 +64,20 @@ export default class TabComponent extends BasisPanelChildComponent {
             const closeElement =  e.target  as HTMLInputElement
             const headerElement = closeElement.getAttribute("data-id")         
             const header = closeElement.parentElement
+           
             this.tabNodes.map(x => {
-                let dataId = x.getAttribute("data-id")
+                let dataId = x.getAttribute("component-id")
                 if(parseInt(dataId) == parseInt(headerElement)){
                     this.activeComponent = x
                     this.activeHeader = header
                 }
             })
+            
             this.activeComponent.remove()
             this.activeHeader.remove()
             this.activeTab(this.tabNodes[0])  
+            
+            
           });
         span.addEventListener("click", (e) => { 
             const headerElement = e.target  as HTMLInputElement
@@ -119,7 +123,7 @@ export default class TabComponent extends BasisPanelChildComponent {
             this.firstTabInitialize = true
         }
         else if(source){
-            const componentId = Math.floor(Math.random() * 10000)    
+            const componentId = Math.floor(Math.random() * 10000)  
             const activeTab = this.tabComponentOptions.find(element => element.triggers.find(element1 => element1 == source._id) );
             this.headerWrapper.appendChild(this.createHeader(activeTab.title ,componentId))
             const basisOptions = `{"settings": {"connection.web.fingerfoodapii": "https://dbsource.basiscore.net/data.json"}}`
