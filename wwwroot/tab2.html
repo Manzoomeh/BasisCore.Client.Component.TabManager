@@ -1,0 +1,74 @@
+<div class="widget_wrapper" id="myFiles">
+    <style>
+     
+	.date-picker-input {
+                border: none;
+                background: none;
+            }
+            .date-picker-wrapper {
+                background: rgba(0, 0, 0, 0.04);
+                width: calc(100% - 100px);
+                display: flex;
+                border: 1px solid #C7D6DB;
+                height: 32px;
+                border-radius: 3px;
+            }
+            .date-picker-wrapper svg{
+                position: relative;
+                top: 5px;
+                right: 10px;
+            }
+            .date-picker-wrapper input{
+                background: none;
+                border: none;
+            }
+            .date-picker-wrapper button {
+                background: none;
+                border: none;
+            }
+            .date-picker-wrapper span {
+                font-size: 12px;
+            }
+            .date-picker-input-wrapper {
+                direction: rtl;
+                text-align: right;
+                width: 100%;
+            }
+            .date-picker-input-wrapper input:focus{
+                background: none;
+                box-shadow: none;
+                border: none;
+            }
+    </style>
+
+
+    <div class="widget_title">
+
+        <div class="widget_buttons">
+
+            <div class="new-supplier-btn">
+                <div class="widgetBtn" onclick="supplierNew()">
+                    <i class="lni lni-plus"></i>
+               ثبت برنامه جدید
+                </div>
+            </div>
+           
+        </div>
+
+    </div>
+    
+    <div class="widget_body section-2">
+        <basis core="dbsource" source="fingerfood" name="db" run="atclient" cache="refresh" sid="[##db.suppliercalendar.value|(114)##]">
+            <member request="supplier_calendar" type="list" name="supplier_calendar" preview="true"></member>
+        </basis>
+       
+        <div class="supplier_resize">
+            <Basis core="component.bc.grid" run="atclient" datamembername="db.supplier_calendar" 
+            options="supplierCalendarGrid"></Basis>
+        </div>
+		
+
+    </div>
+
+
+</div>

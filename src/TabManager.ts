@@ -2,10 +2,10 @@
 import layout from "../src/widget1.html";
 import IUserDefineComponent from "../src/basiscore/IUserDefineComponent";
 import BasisPanelChildComponent from "../src/BasisPanelChildComponent";
-import "./asset/style.css"
+
 interface ITabOptions {
     title : string ,
-    widgetId : number ,
+    widgetURL : string ,
     active : boolean,
     triggers : string[]    
 }
@@ -16,32 +16,42 @@ export default class TabComponent extends BasisPanelChildComponent {
     protected activeHeader : Element
     protected tabNodes : Element[] =[]
     protected headerWrapper :Element
+    protected bodyWrapper : Element
     protected firstTabInitialize = false
-    constructor(owner: IUserDefineComponent){
-      
-      super(owner, layout, "bc-tab-container");
-      
+    constructor(owner: IUserDefineComponent , container){
+      super(owner, layout,  container);
     }
     async createBody():Promise<void>{
         //comment this
         let triggersArray : string[]= []
-        const firstTab = this.tabComponentOptions.find(element => element.active == true);
-        const componentId = Math.floor(Math.random() * 10000) 
+        const firstTabs :ITabOptions[] = []
+         this.tabComponentOptions.find(function(element, index) {
+             if(element.active == true){
+                firstTabs.push(element)
+             }
+         });
         this.headerWrapper = document.createElement("div")
         this.headerWrapper.setAttribute("bc-tab-header-wrapper","")
-        this.headerWrapper.appendChild(this.createHeader(firstTab.title , componentId, 1))
+        this.bodyWrapper = document.createElement("div")
+        this.bodyWrapper.setAttribute("bc-tab-body-wrapper","")
         this.container.appendChild(this.headerWrapper)
-        let basisElement = document.createElement("basis")
-        basisElement.setAttribute("core","call")
-        basisElement.setAttribute("file" ,`${firstTab.widgetId}.html` )
-        basisElement.setAttribute("run","atclient")
-        await this.initializeComponent(basisElement , componentId)
+        this.container.appendChild(this.bodyWrapper) 
+        for(var i = 0 ; i <firstTabs.length ; i++){
+            const componentId = Math.floor(Math.random() * 10000)            
+            this.headerWrapper.appendChild(this.createHeader(firstTabs[i].title , componentId, 1))
+            let basisElement = document.createElement("basis")
+            basisElement.setAttribute("core","call")
+            basisElement.setAttribute("url" , firstTabs[i].widgetURL)
+            basisElement.setAttribute("run","atclient")
+            await this.initializeComponent( basisElement , componentId)
+        }
         for(var i = 0 ; i < this.tabComponentOptions.length ; i++){            
             if(this.tabComponentOptions[i].triggers.length > 0 ){          
                 triggersArray.push(this.tabComponentOptions[i].triggers[0]) 
             }
         }
          this.owner.addTrigger(triggersArray);
+         this.activeTab(this.tabNodes[0])  
     
 
     }
@@ -75,13 +85,13 @@ export default class TabComponent extends BasisPanelChildComponent {
             
             this.activeComponent.remove()
             this.activeHeader.remove()
-            this.activeTab(this.tabNodes[0])  
+            // this.activeTab(this.tabNodes[0])  
             
             
           });
         span.addEventListener("click", (e) => { 
             const headerElement = e.target  as HTMLInputElement
-            const headerId = headerElement.getAttribute("data-id")                 
+            const headerId = headerElement.getAttribute("data-id")      
             this.tabNodes.map(x => {                
                 const componentId = x.getAttribute("component-id")           
                 if (parseInt(headerId) == parseInt(componentId)){
@@ -92,12 +102,13 @@ export default class TabComponent extends BasisPanelChildComponent {
         return header
     }
 
-    async initializeComponent(activeComponent : Element , id :number):Promise<void>{         
+    async initializeComponent( activeComponent : Element , id :number):Promise<void>{  
         let componentWrapper = document.createElement("div")
         componentWrapper.appendChild(activeComponent)
         componentWrapper.setAttribute("bc-tab-component-wrapper" , "")
         componentWrapper.setAttribute("component-id" , id.toString())
-        this.container.appendChild(componentWrapper) 
+        this.bodyWrapper.appendChild(componentWrapper)
+        
         this.tabNodes.push(componentWrapper)
         this.activeComponent = componentWrapper
         this.tabNodes.map(x => {
@@ -126,16 +137,14 @@ export default class TabComponent extends BasisPanelChildComponent {
             const componentId = Math.floor(Math.random() * 10000)  
             const activeTab = this.tabComponentOptions.find(element => element.triggers.find(element1 => element1 == source._id) );
             this.headerWrapper.appendChild(this.createHeader(activeTab.title ,componentId))
-            const basisOptions = `{"settings": {"connection.web.fingerfoodapii": "https://dbsource.basiscore.net/data.json"}}`
             let groupElement  =document.createElement("basis")
             groupElement.setAttribute("core","group")
             groupElement.setAttribute("run","atclient")
-            let tabSettings : string = `${this.tabsSettings}`
-            groupElement.setAttribute("options" , JSON.stringify(basisOptions)  )
             let basisTag = document.createElement("basis")            
             basisTag.setAttribute("core","call")
-            basisTag.setAttribute("file" ,`${activeTab.widgetId}.html` )
-            basisTag.setAttribute("run","atclient")           
+            basisTag.setAttribute("url" ,activeTab.widgetURL )
+            basisTag.setAttribute("run","atclient")  
+            console.log("command" , basisTag)         
             groupElement.appendChild(basisTag)   
             await this.initializeComponent(groupElement , componentId)     
         }

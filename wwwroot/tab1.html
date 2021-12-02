@@ -1,0 +1,185 @@
+<div class="widget_wrapper" id="myFiles">
+	<style>
+		[data-bc-table] tr td:last-child a {
+            position: relative;
+            display: inline-block;
+			cursor: pointer;
+        }
+		[data-bc-table] tr td:last-child a:nth-child(1):after {
+            content: "ویرایش";
+            position: absolute;
+            bottom: 100%; /* At the top of the tooltip */
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: transparent transparent black transparent;
+            height: 30px;
+            background: black;
+            color: #fff;
+            border-radius: 5px;
+            opacity: 0;
+            visibility: hidden;
+        }
+        [data-bc-table] tr td:last-child a:nth-child(2):after {
+            content: "سفارشات";
+            position: absolute;
+            bottom: 100%; /* At the top of the tooltip */
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: transparent transparent black transparent;
+            height: 30px;
+            background: black;
+            color: #fff;
+            border-radius: 5px;
+            opacity: 0;
+            visibility: hidden;
+        }
+        [data-bc-table] tr td:last-child a:nth-child(3):after {
+            content: "تجهیزات";
+            position: absolute;
+            bottom: 100%; /* At the top of the tooltip */
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: transparent transparent black transparent;
+            height: 30px;
+            background: black;
+            color: #fff;
+            border-radius: 5px;
+            opacity: 0;
+            visibility: hidden;
+        }
+		[data-bc-table] tr td:last-child a:hover:after {
+            visibility: visible;
+            /* Fade in */
+            opacity: 1;
+        }
+	</style>
+<basis
+  core="dbsource"
+  source="fingerfood"
+  name="db"
+  run="atclient"
+  cache="refresh"
+>
+  <member
+    request="supplier_list"
+    type="list"
+    name="supplier_list1"
+    preview=""
+  ></member>
+</basis>
+
+<div class="supplier_resize">
+  <basis
+    core="component.bc.grid"
+    run="atclient"
+    datamembername="db.supplier_list1"
+    options="optionsGrid123"
+  ></basis>
+</div>
+
+<script>
+  if (typeof supplierCalendarGrid === "undefined") {
+    var supplierCalendarGrid = {
+      columns: {
+        bundleTitle: "عنوان ",
+
+        count: "تعداد",
+        sstring: "تاریخ",
+      },
+      filter: "none",
+      defaultSort: false,
+      direction: "rtl",
+      paging: 20,
+      firstAndLastBtn: false,
+      noData: "Ops, no data...!",
+      culture: {
+        labels: {
+          next: "بعدی",
+          previous: "قبلی",
+          first: "اولین صفحه",
+          last: "آخرین صفحه",
+        },
+      },
+    };
+  }
+  if (typeof optionsGrid123 === "undefined") {
+    var optionsGrid123 = {
+      columns: {
+        rownumber: "ردیف",
+        id: {
+          title: "کد تامین‌کننده",
+        },
+        title: {
+          title: "عنوان",
+          sort: true,
+        },
+        phone: "شماره تماس",
+        action: {
+          title: "عملیات",
+          cellMaker: (row, data, td) => `<div class="icons">
+                        <a title="ویرایش" nclick="showSupplierInfo(this,${row.id})"><i class="lni lni-pencil-alt"></i></a>
+                        <a title="لیست فعالیت ها" onclick="showCalendar(this,${row.id})">calendar</a>
+                        <a title="فعال" onclick="showAccessories(this,${row.id})">accessories</a>
+                    </div>`,
+          sort: false,
+        },
+      },
+      filter: "none",
+      defaultSort: false,
+      direction: "rtl",
+      paging: 20,
+      firstAndLastBtn: false,
+      noData: "Ops, no data...!",
+      culture: {
+        labels: {
+          next: "بعدی",
+          previous: "قبلی",
+          first: "اولین صفحه",
+          last: "آخرین صفحه",
+        },
+      },
+    };
+  }
+  if (typeof supplierAccessoriesGrid === "undefined") {
+    var supplierAccessoriesGrid = {
+      columns: {
+        title: "عنوان تجهیزات",
+        model: "مدل",
+        count: "تعداد",
+        remaining: "باقی‌مانده",
+      },
+      filter: "none",
+      defaultSort: false,
+      direction: "rtl",
+      paging: 20,
+      firstAndLastBtn: false,
+      noData: "Ops, no data...!",
+      culture: {
+        labels: {
+          next: "بعدی",
+          previous: "قبلی",
+          first: "اولین صفحه",
+          last: "آخرین صفحه",
+        },
+      },
+    };
+  }
+  function showCalendar(e, id) {
+    $bc.setSource("db.suppliercalendar", id.toString());
+  }
+  function showAccessories(e, id) {
+    $bc.setSource("db.supplieraccessories", id.toString());
+  }
+  function showSupplierInfo(e, id) {
+    $bc.setSource("db.supplierid", id.toString());
+  }
+  
+</script>
+
+</div>
