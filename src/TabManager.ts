@@ -62,7 +62,6 @@ export default class TabComponent extends BasisPanelChildComponent {
             basisElement.setAttribute("core","call")
             basisElement.setAttribute("url" , firstTabs[i].widgetURL)
             basisElement.setAttribute("run","atclient")
-            console.log("inja load miashe? ")  
             this.initializeComponent( basisElement , componentId)
         }
         for(var i = 0 ; i < this.tabComponentOptions.length ; i++){            
@@ -88,7 +87,6 @@ export default class TabComponent extends BasisPanelChildComponent {
         closeBtn.textContent = "x"
         closeBtn.setAttribute("bc-tab-close-button" , "")
         header.appendChild(span)
-        console.log("what??" , firstTab)
         if(firstTab == 2){
             header.setAttribute("data-bc-sidebar-active","") 
         }
@@ -178,8 +176,7 @@ export default class TabComponent extends BasisPanelChildComponent {
             let basisTag = document.createElement("basis")          
             basisTag.setAttribute("core","call")
             basisTag.setAttribute("url" ,activeTab.widgetURL )
-            basisTag.setAttribute("run","atclient")  
-            console.log("command" , basisTag)         
+            basisTag.setAttribute("run","atclient")       
             groupElement.appendChild(basisTag)   
             await this.initializeComponent(groupElement , componentId)     
         }
