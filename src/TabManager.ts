@@ -32,18 +32,38 @@ export default class TabComponent extends BasisPanelChildComponent {
          });
         this.headerWrapper = document.createElement("div")
         this.headerWrapper.setAttribute("bc-tab-header-wrapper","")
+        this.headerWrapper.setAttribute("data-bc-sidebar","")
         this.bodyWrapper = document.createElement("div")
         this.bodyWrapper.setAttribute("bc-tab-body-wrapper","")
+        this.headerWrapper.setAttribute("gs-w","2");
+        this.bodyWrapper.setAttribute("gs-w","10");
+        this.bodyWrapper.setAttribute("gs-x","0");
+        this.bodyWrapper.setAttribute("gs-y","0");
+        this.bodyWrapper.setAttribute("gs-h","6");
+        this.bodyWrapper.setAttribute("style","left:0;top:0");
+        
+        this.bodyWrapper.setAttribute("data-bc-bp-sidebar-container","");
+        this.bodyWrapper.setAttribute("data-bc-bp-sidebar-container","");
+        this.headerWrapper.setAttribute("data-bc-bp-sidebar-container","");
+        
         this.container.appendChild(this.headerWrapper)
         this.container.appendChild(this.bodyWrapper) 
+      
         for(var i = 0 ; i <firstTabs.length ; i++){
-            const componentId = Math.floor(Math.random() * 10000)            
-            this.headerWrapper.appendChild(this.createHeader(firstTabs[i].title , componentId, 1))
+            const componentId = Math.floor(Math.random() * 10000)   
+            if(i ==0 ){
+                this.headerWrapper.appendChild(this.createHeader(firstTabs[i].title , componentId, 2))
+            }   
+            else{
+                this.headerWrapper.appendChild(this.createHeader(firstTabs[i].title , componentId, 1))
+            }      
+            
             let basisElement = document.createElement("basis")
             basisElement.setAttribute("core","call")
             basisElement.setAttribute("url" , firstTabs[i].widgetURL)
             basisElement.setAttribute("run","atclient")
-            await this.initializeComponent( basisElement , componentId)
+            console.log("inja load miashe? ")  
+            this.initializeComponent( basisElement , componentId)
         }
         for(var i = 0 ; i < this.tabComponentOptions.length ; i++){            
             if(this.tabComponentOptions[i].triggers.length > 0 ){          
@@ -52,6 +72,7 @@ export default class TabComponent extends BasisPanelChildComponent {
         }
          this.owner.addTrigger(triggersArray);
          this.activeTab(this.tabNodes[0])  
+         
     
 
     }
@@ -60,16 +81,27 @@ export default class TabComponent extends BasisPanelChildComponent {
         const closeBtn = document.createElement("button")
         const span = document.createElement("span")
         header.setAttribute("bc-tab-header" , "")
+        header.setAttribute("data-bc-sidebar-items" , "")        
         span.setAttribute("data-id" ,  id.toString())
         closeBtn.setAttribute("data-id" ,  id.toString())
         span.textContent = headerText        
         closeBtn.textContent = "x"
         closeBtn.setAttribute("bc-tab-close-button" , "")
         header.appendChild(span)
-        if(firstTab == 0 ){
+        console.log("what??" , firstTab)
+        if(firstTab == 2){
+            header.setAttribute("data-bc-sidebar-active","") 
+        }
+        else if(firstTab == 0 ){           
             header.appendChild(closeBtn)
+            const activeHeaders = Array.from(this.headerWrapper.querySelectorAll("[data-bc-sidebar-active]"))
+            activeHeaders.map((x) => {
+                x.removeAttribute("data-bc-sidebar-active")
+            })
+            header.setAttribute("data-bc-sidebar-active","") 
         }
         this.activeHeader = header
+          
         closeBtn.addEventListener("click", (e) => {
             const closeElement =  e.target  as HTMLInputElement
             const headerElement = closeElement.getAttribute("data-id")         
@@ -85,17 +117,20 @@ export default class TabComponent extends BasisPanelChildComponent {
             
             this.activeComponent.remove()
             this.activeHeader.remove()
-            // this.activeTab(this.tabNodes[0])  
-            
-            
+            // this.activeTab(this.tabNodes[0])             
           });
-        span.addEventListener("click", (e) => { 
+        span.addEventListener("click", (e) => {          
             const headerElement = e.target  as HTMLInputElement
             const headerId = headerElement.getAttribute("data-id")      
-            this.tabNodes.map(x => {                
+            this.tabNodes.map(x => {   
                 const componentId = x.getAttribute("component-id")           
                 if (parseInt(headerId) == parseInt(componentId)){
-                    this.activeTab(x)  
+                    const activeHeaders = Array.from(this.headerWrapper.querySelectorAll("[data-bc-sidebar-active]"))
+                    activeHeaders.map((x) => {
+                        x.removeAttribute("data-bc-sidebar-active")
+                    })
+                    this.activeTab(x)   
+                    header.setAttribute("data-bc-sidebar-active","") 
                 }
             })
         });
@@ -140,7 +175,7 @@ export default class TabComponent extends BasisPanelChildComponent {
             let groupElement  =document.createElement("basis")
             groupElement.setAttribute("core","group")
             groupElement.setAttribute("run","atclient")
-            let basisTag = document.createElement("basis")            
+            let basisTag = document.createElement("basis")          
             basisTag.setAttribute("core","call")
             basisTag.setAttribute("url" ,activeTab.widgetURL )
             basisTag.setAttribute("run","atclient")  

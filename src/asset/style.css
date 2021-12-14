@@ -1,8 +1,0 @@
-[bc-tab-active-component ="false"]{display: none;}
-[bc-tab-header-wrapper]{display: flex;background: #fff;
-	height: 35px;width: 80%; background: #fff;}
-[bc-tab-close-button]{border: none; background: none;}
-[bc-tab-header]{border-left: 1px solid var(--light_gray);padding: 5px 10px;
-margin-left: 1px;}
-[bc-tab-close-button]{margin-right: 5px;}
-[bc-tab-header]{cursor: pointer;}
