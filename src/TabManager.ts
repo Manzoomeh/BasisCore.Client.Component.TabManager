@@ -1,202 +1,241 @@
-
 import layout from "../src/widget1.html";
 import IUserDefineComponent from "../src/basiscore/IUserDefineComponent";
 import BasisPanelChildComponent from "../src/BasisPanelChildComponent";
 
 interface ITabOptions {
-    title : string ,
-    widgetURL : string ,
-    active : boolean,
-    triggers : string[]    
+  title: string;
+  widgetURL: string;
+  active: boolean;
+  triggers: string[];
+  tabs: ITabOptions[];
 }
 export default class TabComponent extends BasisPanelChildComponent {
-    public tabComponentOptions : ITabOptions[]
-    public tabsSettings : object;
-    protected activeComponent : Element
-    protected activeHeader : Element
-    protected tabNodes : Element[] =[]
-    protected headerWrapper :Element
-    protected bodyWrapper : Element
-    protected firstTabInitialize = false
-    constructor(owner: IUserDefineComponent , container){
-      super(owner, layout,  container);
-    }
-    async createBody():Promise<void>{
-        //comment this
-        let triggersArray : string[]= []
-        const firstTabs :ITabOptions[] = []
-         this.tabComponentOptions.find(function(element, index) {
-             if(element.active == true){
-                firstTabs.push(element)
-             }
-         });
-        this.headerWrapper = document.createElement("div")
-        this.headerWrapper.setAttribute("bc-tab-header-wrapper","")
-        this.headerWrapper.setAttribute("data-bc-sidebar","")
-        this.bodyWrapper = document.createElement("div")
-        this.bodyWrapper.setAttribute("bc-tab-body-wrapper","")
-        this.headerWrapper.setAttribute("gs-w","2");
-        this.bodyWrapper.setAttribute("gs-w","10");
-        this.bodyWrapper.setAttribute("gs-x","0");
-        this.bodyWrapper.setAttribute("gs-y","0");
-        this.bodyWrapper.setAttribute("gs-h","6");
-        this.bodyWrapper.setAttribute("style","left:0;top:0");
-        
-        this.bodyWrapper.setAttribute("data-bc-bp-sidebar-container","");
-        this.bodyWrapper.setAttribute("data-bc-bp-sidebar-container","");
-        this.headerWrapper.setAttribute("data-bc-bp-sidebar-container","");
-        
-        this.container.appendChild(this.headerWrapper)
-        this.container.appendChild(this.bodyWrapper) 
-      
-        for(var i = 0 ; i <firstTabs.length ; i++){
-            const componentId = Math.floor(Math.random() * 10000)   
-            if(i ==0 ){
-                this.headerWrapper.appendChild(this.createHeader(firstTabs[i].title , componentId, 2))
-            }   
-            else{
-                this.headerWrapper.appendChild(this.createHeader(firstTabs[i].title , componentId, 1))
-            }      
-            
-            let basisElement = document.createElement("basis")
-            basisElement.setAttribute("core","call")
-            basisElement.setAttribute("url" , firstTabs[i].widgetURL)
-            basisElement.setAttribute("run","atclient")
-            this.initializeComponent( basisElement , componentId)
-        }
-        for(var i = 0 ; i < this.tabComponentOptions.length ; i++){            
-            if(this.tabComponentOptions[i].triggers.length > 0 ){          
-                triggersArray.push(this.tabComponentOptions[i].triggers[0]) 
-            }
-        }
-         this.owner.addTrigger(triggersArray);
-         this.activeTab(this.tabNodes[0])  
-         
-    
-
-    }
-    createHeader(headerText : string , id: number , firstTab : number = 0) : Element{
-        const header = document.createElement("div")
-        const closeBtn = document.createElement("button")
-        const span = document.createElement("span")
-        header.setAttribute("bc-tab-header" , "")
-        header.setAttribute("data-bc-sidebar-items" , "")        
-        span.setAttribute("data-id" ,  id.toString())
-        closeBtn.setAttribute("data-id" ,  id.toString())
-        span.textContent = headerText        
-        closeBtn.textContent = "x"
-        closeBtn.setAttribute("bc-tab-close-button" , "")
-        header.appendChild(span)
-        if(firstTab == 2){
-            header.setAttribute("data-bc-sidebar-active","") 
-        }
-        else if(firstTab == 0 ){           
-            header.appendChild(closeBtn)
-            const activeHeaders = Array.from(this.headerWrapper.querySelectorAll("[data-bc-sidebar-active]"))
-            activeHeaders.map((x) => {
-                x.removeAttribute("data-bc-sidebar-active")
-            })
-            header.setAttribute("data-bc-sidebar-active","") 
-        }
-        this.activeHeader = header
-          
-        closeBtn.addEventListener("click", (e) => {
-            const closeElement =  e.target  as HTMLInputElement
-            const headerElement = closeElement.getAttribute("data-id")         
-            const header = closeElement.parentElement
-           
-            this.tabNodes.map(x => {
-                let dataId = x.getAttribute("component-id")
-                if(parseInt(dataId) == parseInt(headerElement)){
-                    this.activeComponent = x
-                    this.activeHeader = header
-                }
-            })
-            
-            this.activeComponent.remove()
-            this.activeHeader.remove()
-            // this.activeTab(this.tabNodes[0])             
-          });
-        span.addEventListener("click", (e) => {          
-            const headerElement = e.target  as HTMLInputElement
-            const headerId = headerElement.getAttribute("data-id")      
-            this.tabNodes.map(x => {   
-                const componentId = x.getAttribute("component-id")           
-                if (parseInt(headerId) == parseInt(componentId)){
-                    const activeHeaders = Array.from(this.headerWrapper.querySelectorAll("[data-bc-sidebar-active]"))
-                    activeHeaders.map((x) => {
-                        x.removeAttribute("data-bc-sidebar-active")
-                    })
-                    this.activeTab(x)   
-                    header.setAttribute("data-bc-sidebar-active","") 
-                }
-            })
-        });
-        return header
-    }
-
-    async initializeComponent( activeComponent : Element , id :number):Promise<void>{  
-        let componentWrapper = document.createElement("div")
-        componentWrapper.appendChild(activeComponent)
-        componentWrapper.setAttribute("bc-tab-component-wrapper" , "")
-        componentWrapper.setAttribute("component-id" , id.toString())
-        this.bodyWrapper.appendChild(componentWrapper)
-        
-        this.tabNodes.push(componentWrapper)
-        this.activeComponent = componentWrapper
-        this.tabNodes.map(x => {
-            x.setAttribute("bc-tab-active-component" , "false")
-        })
-        this.activeComponent.setAttribute("bc-tab-active-component" , "true")
-        //const nodes= Array.from(this.container.childNodes)
-        //this.owner.setContent(this.container);    
-        await this.owner.processNodesAsync([activeComponent]);
-        
-       
-    }
-    activeTab(activeComponent? : Element):void{    
-        this.tabNodes.map(x => {
-            x.setAttribute("bc-tab-active-component" , "false")
-        })        
-        activeComponent.setAttribute("bc-tab-active-component" , "true")
-        this.activeComponent =activeComponent
-    }
-    async runAsync(source?): Promise<any> {  
-        if(!this.firstTabInitialize ){
-            await this.createBody()
-            this.firstTabInitialize = true
-        }
-        else if(source){
-            const componentId = Math.floor(Math.random() * 10000)  
-            const activeTab = this.tabComponentOptions.find(element => element.triggers.find(element1 => element1 == source._id) );
-            this.headerWrapper.appendChild(this.createHeader(activeTab.title ,componentId))
-            let groupElement  =document.createElement("basis")
-            groupElement.setAttribute("core","group")
-            groupElement.setAttribute("run","atclient")
-            let basisTag = document.createElement("basis")          
-            basisTag.setAttribute("core","call")
-            basisTag.setAttribute("url" ,activeTab.widgetURL )
-            basisTag.setAttribute("run","atclient")       
-            groupElement.appendChild(basisTag)   
-            await this.initializeComponent(groupElement , componentId)     
-        }
-                 
-        return true
+  public tabComponentOptions: ITabOptions[];
+  public tabsSettings: object;
+  protected activeComponent: Element;
+  protected activeHeader: Element;
+  protected tabNodes: Element[] = [];
+  protected headerWrapper: Element;
+  protected bodyWrapper: Element;
+  protected firstTabInitialize = false;
+  constructor(owner: IUserDefineComponent, container) {
+    super(owner, layout, container);
+  }
+  async createBody(): Promise<void> {
+    //comment this
+    let triggersArray: string[] = [];
+    const firstTabs: ITabOptions[] = [];
+    this.tabComponentOptions.find(function (element, index) {
+      if (element.active == true) {
+        firstTabs.push(element);
       }
-    public async getOptions():  Promise<void> {
-        
-        const settingObject = await this.owner.getAttributeValueAsync(
-            "options"
+    });
+    this.headerWrapper = document.createElement("div");
+    this.headerWrapper.setAttribute("bc-tab-header-wrapper", "");
+    this.headerWrapper.setAttribute("data-bc-sidebar", "");
+    this.bodyWrapper = document.createElement("div");
+    this.bodyWrapper.setAttribute("bc-tab-body-wrapper", "");
+    this.headerWrapper.setAttribute("gs-w", "2");
+    this.bodyWrapper.setAttribute("gs-w", "10");
+    this.bodyWrapper.setAttribute("gs-x", "0");
+    this.bodyWrapper.setAttribute("gs-y", "0");
+    this.bodyWrapper.setAttribute("gs-h", "6");
+    this.bodyWrapper.setAttribute("style", "left:0;top:0");
+
+    this.bodyWrapper.setAttribute("data-bc-bp-sidebar-container", "");
+    this.bodyWrapper.setAttribute("data-bc-bp-sidebar-container", "");
+    this.headerWrapper.setAttribute("data-bc-bp-sidebar-container", "");
+
+    this.container.appendChild(this.headerWrapper);
+    this.container.appendChild(this.bodyWrapper);
+    for (var i = 0; i < firstTabs.length; i++) {
+      const componentId = Math.floor(Math.random() * 10000);
+      const arr: ITabOptions[] = firstTabs[i].tabs ? firstTabs[i].tabs : [];
+
+      if (i == 0 && arr.length == 0) {
+        this.headerWrapper.appendChild(
+          this.createHeader(firstTabs[i].title, componentId, 2)
+        );
+        // if its 2 mean its first tab
+      } else if (arr.length == 0) {
+        this.headerWrapper.appendChild(
+          this.createHeader(firstTabs[i].title, componentId, 1)
+        );
+      }
+      let basisElement = document.createElement("basis");
+      basisElement.setAttribute("core", "call");
+      basisElement.setAttribute("url", firstTabs[i].widgetURL);
+      basisElement.setAttribute("run", "atclient");
+      const parentHeader = document.createElement("div");
+      let parentFlag: number = 0;
+      for (var j = 0; j < arr.length; j++) {
+        parentFlag = 1;
+        const componentId = Math.floor(Math.random() * 10000);
+
+        parentHeader.setAttribute("bc-tab-header-parent", "");
+        parentHeader.classList.add("hideTab")
+        const childWrapper = document.createElement("div");
+        childWrapper.setAttribute("bc-tab-header-child", "");
+        // parentHeader.textContent = headerText
+
+        childWrapper.appendChild(
+          this.createHeader(arr[j].title, componentId, 1)
+        );
+
+        parentHeader.appendChild(childWrapper);
+
+        let basisElement = document.createElement("basis");
+        basisElement.setAttribute("core", "call");
+        basisElement.setAttribute("url", arr[j].widgetURL);
+        basisElement.setAttribute("run", "atclient");
+        this.initializeComponent(basisElement, componentId);
+        if (j == arr.length - 1) {
+          this.headerWrapper.appendChild(
+            this.createHeader(firstTabs[i].title, componentId, 3, parentHeader)
           );
-        this.tabComponentOptions  = eval(settingObject).tabs;
-        this.tabsSettings = eval(settingObject).tabSettings
-      
-    } 
-    public async initializeAsync():  Promise<void> {
+        }
+      }
+      this.initializeComponent(basisElement, componentId);
+    }
+    for (var i = 0; i < this.tabComponentOptions.length; i++) {
+      if (
+        this.tabComponentOptions[i].triggers &&
+        this.tabComponentOptions[i].triggers.length > 0
+      ) {
+        triggersArray.push(this.tabComponentOptions[i].triggers[0]);
+      }
+    }
+    this.owner.addTrigger(triggersArray);
+    this.activeTab(this.tabNodes[0]);
+  }
+  createHeader(
+    headerText: string,
+    id: number,
+    firstTab: number = 0,
+    container?: HTMLElement
+  ): Element {
+    const header = document.createElement("div");
+    header.setAttribute("bc-tab-header", "");
+    header.setAttribute("data-bc-sidebar-items", "");
+    const closeBtn = document.createElement("button");
+    const span = document.createElement("span");
+    span.setAttribute("data-id", id.toString());
+    closeBtn.setAttribute("data-id", id.toString());
+    span.textContent = headerText;
+    closeBtn.textContent = "x";
+    closeBtn.setAttribute("bc-tab-close-button", "");
+    header.appendChild(span);
+    if (firstTab == 2) {
+      header.setAttribute("data-bc-sidebar-active", "");
+    } else if (firstTab == 0) {
+      header.appendChild(closeBtn);
+      const activeHeaders = Array.from(
+        this.headerWrapper.querySelectorAll("[data-bc-sidebar-active]")
+      );
+      activeHeaders.map((x) => {
+        x.removeAttribute("data-bc-sidebar-active");
+      });
+      header.setAttribute("data-bc-sidebar-active", "");
+    }
+    if (container) {
+      span.classList.toggle("bc-tab-parent")
+        span.addEventListener("click", (e) => {
+            this.slide(container)
+            span.classList.toggle("bc-tab-parent-open")
+        })
         
-       await this.getOptions()
-       
-       
+        header.appendChild(container);
+        return header
+      }
+    this.activeHeader = header;
+    closeBtn.addEventListener("click", (e) => {
+      const returnFirstHeader = this.headerWrapper.querySelectorAll("div")[0]
+      this.activeComponent.remove();
+      this.activeHeader.remove();
+      this.activeComponent = this.tabNodes[0];
+      this.activeTab(this.tabNodes[0]);
+      returnFirstHeader.setAttribute("data-bc-sidebar-active", "");
+      this.activeHeader = returnFirstHeader;
+    });
+    span.addEventListener("click", (e) => {
+      const headerElement = e.target as HTMLInputElement;
+      const headerId = headerElement.getAttribute("data-id");
+      this.tabNodes.map((x) => {
+        const componentId = x.getAttribute("component-id");
+        if (parseInt(headerId) == parseInt(componentId)) {
+          const activeHeaders = Array.from(
+            this.headerWrapper.querySelectorAll("[data-bc-sidebar-active]")
+          );
+          activeHeaders.map((x) => {
+            x.removeAttribute("data-bc-sidebar-active");
+          });
+          this.activeTab(x);
+          header.setAttribute("data-bc-sidebar-active", "");
+        }
+      });
+    });
+  
+    return header;
+  }
+
+  async initializeComponent(
+    activeComponent: Element,
+    id: number
+  ): Promise<void> {
+    let componentWrapper = document.createElement("div");
+    componentWrapper.appendChild(activeComponent);
+    componentWrapper.setAttribute("bc-tab-component-wrapper", "");
+    componentWrapper.setAttribute("component-id", id.toString());
+    this.bodyWrapper.appendChild(componentWrapper);
+    this.tabNodes.push(componentWrapper);
+    this.activeComponent = componentWrapper;
+    this.tabNodes.map((x) => {
+      x.setAttribute("bc-tab-active-component", "false");
+    });
+    this.activeComponent.setAttribute("bc-tab-active-component", "true");
+    await this.owner.processNodesAsync([activeComponent]);
+  }
+  activeTab(activeComponent?: Element): void {
+    this.tabNodes.map((x) => {
+      x.setAttribute("bc-tab-active-component", "false");
+    });
+    activeComponent.setAttribute("bc-tab-active-component", "true");
+    this.activeComponent = activeComponent;
+  }
+  async runAsync(source?): Promise<any> {
+    if (!this.firstTabInitialize) {
+      await this.createBody();
+      this.firstTabInitialize = true;
+    } else if (source) {
+      const componentId = Math.floor(Math.random() * 10000);
+      const activeTab = this.tabComponentOptions.find((element) =>
+        element.triggers.find((element1) => element1 == source._id)
+      );
+      this.headerWrapper.appendChild(
+        this.createHeader(activeTab.title, componentId)
+      );
+      let groupElement = document.createElement("basis");
+      groupElement.setAttribute("core", "group");
+      groupElement.setAttribute("run", "atclient");
+      let basisTag = document.createElement("basis");
+      basisTag.setAttribute("core", "call");
+      basisTag.setAttribute("url", activeTab.widgetURL);
+      basisTag.setAttribute("run", "atclient");
+      groupElement.appendChild(basisTag);
+      await this.initializeComponent(groupElement , componentId)
     }
 
+    return true;
+  }
+  public async getOptions(): Promise<void> {
+    const settingObject = await this.owner.getAttributeValueAsync("options");
+    this.tabComponentOptions = eval(settingObject).tabs;
+    this.tabsSettings = eval(settingObject).tabSettings;
+  }
+  public async initializeAsync(): Promise<void> {
+    await this.getOptions();
+  }
+  public slide(el) : void {    
+    el.classList.toggle('hideTab');
+  }
 }
