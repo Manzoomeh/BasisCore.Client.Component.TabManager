@@ -1,3 +1,4 @@
+in tab 2
 <div class="widget_wrapper" id="myFiles">
     <style>
      
@@ -40,8 +41,8 @@
                 border: none;
             }
     </style>
-
-
+  mid = [##db.mid.value##]
+  usedforid = [##db.usedforid.value##]
     <div class="widget_title">
 
         <div class="widget_buttons">
@@ -56,10 +57,10 @@
         </div>
 
     </div>
-    
+    tab is : [##db.supplieraccessories.value|(114)##]
     <div class="widget_body section-2">
-        <basis core="dbsource" source="fingerfood" name="db" run="atclient" cache="refresh" sid="[##db.suppliercalendar.value|(114)##]">
-            <member request="supplier_calendar" type="list" name="supplier_calendar" preview="true"></member>
+        <basis core="dbsource" source="fingerfood" name="db" run="atclient" cache="refresh" sid="[##db.supplieraccessories.value|(114)##]" triggers="db.supplieraccessories">
+            <member request="supplier_calendar" type="list" name="supplier_calendar" preview=""></member>
         </basis>
        
         <div class="supplier_resize">

@@ -1,3 +1,5 @@
+<script src="https://cdn.basiscore.net/_js/basiscore-2.4.8.js"></script>
+<script src="https://cdn.basiscore.net/_js/alasql.min.js"></script>
 <style>
     [bc-tab-header-wrapper] {
         display: flex;
@@ -14,11 +16,27 @@
         border-left: 1px solid var(--light_gray);
     }
 </style>
-<basis core="component.bc.tabManager" run="atclient" options="mySetting111"></basis>
+sss
+<basis core="component.bc.verticalTabManager" run="atclient" options="mySetting111"></basis>
 <div class="clr"></div>
 
 <script>
+const host = {
+        settings: {
+            
+        'connection.web.callcommand':'http://localhost:3000/',
+        'connection.web.basiscore': 'https://basispanel.ir/api/732DDB11-7439-4ADF-8AB1-44F33CC2FC8B',     
+        'connection.web.fingerfood': 'https://basispanel.ir/api/732DDB11-7439-4ADF-8AB1-44F33CC2FC8B',      
+        'default.call.verb':'get'
 
+    },
+        repositories: {
+            "bc.verticalTabManager": "/basiscore.tabManager.js",
+            "bc.grid": "/basiscore.grid.component.js"
+          
+        }
+
+    }
 
     var mySetting111 = 
 	{
@@ -30,19 +48,207 @@
             "triggers":[]
 		},
         {
-            "title":"لیست برنامه غذایی",
-			"widgetURL":"https://fingerfood.ir/panel/api/DDFA6E51-CCCE-44F4-AC1F-B98B5B496A3A/widget/6",
-			"active" : false,
-            "triggers":["db.suppliercalendar"]
+            "title":"2لیست تامین‌کننده",
+			"widgetURL":"http://localhost:3000/13.html" ,
+			"active" : true,
+            "triggers":[]
 		},
-		{
-            "title":"لیست تجهیزات تامین‌کنندگان",
-			"widgetURL":"https://fingerfood.ir/panel/api/DDFA6E51-CCCE-44F4-AC1F-B98B5B496A3A/widget/7",
-			"active" : false,
-            "triggers":["db.supplieraccessories"]
+        {
+            "title":"3لیست تامین‌کننده",
+			"widgetURL":"http://localhost:3000/14.html" ,
+			"active" : true,
+            "triggers":[]
 		}
 	
 	]
     }
+        
+    const supplierCalendarGrid= {
+                 columns: {
+                     rownumber : "ردیف" , 
+                     qid: {
+                         title: "عنوان تجهیزات",
+                     },
+                     title: "مدل",
+                     answer : "تعداد",
+                     valueis : "باقی‌مانده",
+                 },
+                 filter: "none",
+                 defaultSort:false,
+                 direction: "rtl",
+                 paging: [20],
+                 culture: {
+                    labels: {
+                    "next": "بعدی",
+                    "previous": "قبلی",
+                    "first": "اولین صفحه",
+                    "last": "آخرین صفحه"
+                    }
+                },
+             };
+     const supplierAccessoriesGrid = {
+                 columns: {
+                     rownumber : "ردیف" , 
+                     qid: {
+                         title: "عنوان تجهیزات",
+                     },
+                     title: "مدل",
+                     answer : "تعداد",
+                     valueis : "باقی‌مانده",
+                 },
+                 filter: "none",
+                 defaultSort:false,
+                 direction: "rtl",
+                 paging: [20],
+                 culture: {
+                    labels: {
+                    "next": "بعدی",
+                    "previous": "قبلی",
+                    "first": "اولین صفحه",
+                    "last": "آخرین صفحه"
+                    }
+                },
+             };
+             setTimeout(function(){ 
+            $bc.setSource("db.supplier_list1",[
+				{
+					"id": 128,
+					"title": "نعیمه اعتدال‌مهر",
+					"phone": "09125349455",
+					"name": null,
+					"city": null,
+					"enable": 1
+				},
+				{
+					"id": 127,
+					"title": "شیما شاهرخی",
+					"phone": "09397239941",
+					"name": "شیما شاهرخی",
+					"city": "94",
+					"enable": 1
+				},
+				{
+					"id": 126,
+					"title": "ندا محمدزاده",
+					"phone": "09226358254",
+					"name": "ندا محمدزاده",
+					"city": "94",
+					"enable": 1
+				},
+				{
+					"id": 124,
+					"title": "فاطمه میرحسینی",
+					"phone": "09124852808",
+					"name": "فاطمه میرحسینی",
+					"city": "94",
+					"enable": 1
+				},
+				{
+					"id": 123,
+					"title": "شمیم اعتدال مهر",
+					"phone": "09382349591",
+					"name": "شمیم اعتدال مهر",
+					"city": "94",
+					"enable": 1
+				},
+				{
+					"id": 122,
+					"title": "ثریا ناظری",
+					"phone": "09128028380",
+					"name": "ثریا ناظری",
+					"city": "94",
+					"enable": 1
+				},
+				{
+					"id": 117,
+					"title": "نغمه طالوعی",
+					"phone": "9121433652",
+					"name": "نغمه طالوعی",
+					"city": "94",
+					"enable": 1
+				},
+				{
+					"id": 116,
+					"title": "سپیده شعاعی",
+					"phone": "09028889608",
+					"name": "سپیده شعاعی",
+					"city": "94",
+					"enable": 1
+				},
+				{
+					"id": 115,
+					"title": "فاطمه لاجوردی",
+					"phone": "09056671811",
+					"name": "فاطمه لاجوردی",
+					"city": "94",
+					"enable": 1
+				},
+				{
+					"id": 114,
+					"title": "غدیره مرادی",
+					"phone": "09359338032",
+					"name": "غدیره مرادی",
+					"city": "94",
+					"enable": 1
+				},
+				{
+					"id": 113,
+					"title": "فینگرفود",
+					"phone": "09912505282",
+					"name": "فینگرفود",
+					"city": "94",
+					"enable": 1
+				},
+				{
+					"id": 112,
+					"title": "نان و شیرینی روز",
+					"phone": "02122879301",
+					"name": "نان و شیرینی روز",
+					"city": "94",
+					"enable": 1
+				},
+				{
+					"id": 78,
+					"title": "لقمه چین",
+					"phone": "09122332399",
+					"name": "اعتدال مهر",
+					"city": "94",
+					"enable": 1
+				}
+			])
+          }, 10000);
+        const optionsGrid123 = {
+             columns: {
+                 rownumber : "ردیف" , 
+                 id: {
+                     title: "کد تامین‌کننده",
+                     
+                 },
+                 title: {
+                     title: "عنوان",
+                     sort : true                        
+                 },
+                 phone: "شماره تماس",
+                 action: {
+          cellMaker: (row, data, td) =>
+            `<a onclick="getSupplierId(this,${row.id})">edit</a>
+            <a onclick="getSupplierId1(this,${row.id})">edit1</a>`,
+          sort: false
+        }
+
+             },
+             
+             defaultSort:false,
+             pageSize: [20]
+         };
+         
+     function getSupplierId(e,id){
+         console.log(id.toString())
+         $bc.setSource("list.search" , id.toString())
+     }
+     function getSupplierId1(e,id){
+         console.log(id.toString())
+         $bc.setSource("list.search1" , id.toString())
+     }
 
 </script>

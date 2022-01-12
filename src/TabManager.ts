@@ -1,17 +1,18 @@
 import layout from "../src/widget1.html";
 import IUserDefineComponent from "../src/basiscore/IUserDefineComponent";
 import BasisPanelChildComponent from "../src/BasisPanelChildComponent";
-
 interface ITabOptions {
   title: string;
   widgetURL: string;
   active: boolean;
   triggers: string[];
   tabs: ITabOptions[];
+  params : object
 }
-export default class TabComponent extends BasisPanelChildComponent {
+
+export  default abstract class TabComponent extends BasisPanelChildComponent {
   public tabComponentOptions: ITabOptions[];
-  public tabsSettings: object;
+  public runType: boolean = true;
   protected activeComponent: Element;
   protected activeHeader: Element;
   protected tabNodes: Element[] = [];
@@ -22,17 +23,15 @@ export default class TabComponent extends BasisPanelChildComponent {
     super(owner, layout, container);
   }
   async createBody(): Promise<void> {
-    //comment this
     let triggersArray: string[] = [];
     const firstTabs: ITabOptions[] = [];
-    this.tabComponentOptions.find(function (element, index) {
+    this.tabComponentOptions.find(function (element) {
       if (element.active == true) {
         firstTabs.push(element);
       }
     });
     this.headerWrapper = document.createElement("div");
-    this.headerWrapper.setAttribute("bc-tab-header-wrapper", "");
-    this.headerWrapper.setAttribute("data-bc-sidebar", "");
+    this.headerWrapper.setAttribute("bc-tab-header-wrapper", "");    
     this.bodyWrapper = document.createElement("div");
     this.bodyWrapper.setAttribute("bc-tab-body-wrapper", "");
     this.headerWrapper.setAttribute("gs-w", "2");
@@ -40,23 +39,16 @@ export default class TabComponent extends BasisPanelChildComponent {
     this.bodyWrapper.setAttribute("gs-x", "0");
     this.bodyWrapper.setAttribute("gs-y", "0");
     this.bodyWrapper.setAttribute("gs-h", "6");
-    this.bodyWrapper.setAttribute("style", "left:0;top:0");
-
-    this.bodyWrapper.setAttribute("data-bc-bp-sidebar-container", "");
-    this.bodyWrapper.setAttribute("data-bc-bp-sidebar-container", "");
-    this.headerWrapper.setAttribute("data-bc-bp-sidebar-container", "");
-
+    this.bodyWrapper.setAttribute("style", "left:0;top:0");    
     this.container.appendChild(this.headerWrapper);
     this.container.appendChild(this.bodyWrapper);
     for (var i = 0; i < firstTabs.length; i++) {
       const componentId = Math.floor(Math.random() * 10000);
       const arr: ITabOptions[] = firstTabs[i].tabs ? firstTabs[i].tabs : [];
-
       if (i == 0 && arr.length == 0) {
         this.headerWrapper.appendChild(
           this.createHeader(firstTabs[i].title, componentId, 2)
         );
-        // if its 2 mean its first tab
       } else if (arr.length == 0) {
         this.headerWrapper.appendChild(
           this.createHeader(firstTabs[i].title, componentId, 1)
@@ -64,38 +56,49 @@ export default class TabComponent extends BasisPanelChildComponent {
       }
       let basisElement = document.createElement("basis");
       basisElement.setAttribute("core", "call");
+      basisElement.setAttribute("method", "get");
       basisElement.setAttribute("url", firstTabs[i].widgetURL);
       basisElement.setAttribute("run", "atclient");
+      basisElement.setAttribute("params" , JSON.stringify(firstTabs[i].params) )
       const parentHeader = document.createElement("div");
-      let parentFlag: number = 0;
+      var parentFlag: number = 0;
       for (var j = 0; j < arr.length; j++) {
         parentFlag = 1;
         const componentId = Math.floor(Math.random() * 10000);
-
         parentHeader.setAttribute("bc-tab-header-parent", "");
         parentHeader.classList.add("hideTab")
         const childWrapper = document.createElement("div");
         childWrapper.setAttribute("bc-tab-header-child", "");
-        // parentHeader.textContent = headerText
-
         childWrapper.appendChild(
           this.createHeader(arr[j].title, componentId, 1)
         );
-
         parentHeader.appendChild(childWrapper);
-
         let basisElement = document.createElement("basis");
         basisElement.setAttribute("core", "call");
+        basisElement.setAttribute("method", "get");
         basisElement.setAttribute("url", arr[j].widgetURL);
         basisElement.setAttribute("run", "atclient");
-        this.initializeComponent(basisElement, componentId);
+        basisElement.setAttribute("params" , JSON.stringify(arr[j].params) )
+        if(i == 0){
+          this.initializeComponent(basisElement, componentId,true);
+        }
+        else {
+          this.initializeComponent(basisElement, componentId,this.runType);
+        }
+        
         if (j == arr.length - 1) {
           this.headerWrapper.appendChild(
             this.createHeader(firstTabs[i].title, componentId, 3, parentHeader)
           );
         }
       }
-      this.initializeComponent(basisElement, componentId);
+      if(i == 0){
+        this.initializeComponent(basisElement, componentId,true);
+      }
+      else {
+        this.initializeComponent(basisElement, componentId,this.runType);
+      }
+      
     }
     for (var i = 0; i < this.tabComponentOptions.length; i++) {
       if (
@@ -108,80 +111,23 @@ export default class TabComponent extends BasisPanelChildComponent {
     this.owner.addTrigger(triggersArray);
     this.activeTab(this.tabNodes[0]);
   }
-  createHeader(
+  abstract createHeader(
     headerText: string,
     id: number,
-    firstTab: number = 0,
+    firstTab? : number,
     container?: HTMLElement
-  ): Element {
-    const header = document.createElement("div");
-    header.setAttribute("bc-tab-header", "");
-    header.setAttribute("data-bc-sidebar-items", "");
-    const closeBtn = document.createElement("button");
-    const span = document.createElement("span");
-    span.setAttribute("data-id", id.toString());
-    closeBtn.setAttribute("data-id", id.toString());
-    span.textContent = headerText;
-    closeBtn.textContent = "x";
-    closeBtn.setAttribute("bc-tab-close-button", "");
-    header.appendChild(span);
-    if (firstTab == 2) {
-      header.setAttribute("data-bc-sidebar-active", "");
-    } else if (firstTab == 0) {
-      header.appendChild(closeBtn);
-      const activeHeaders = Array.from(
-        this.headerWrapper.querySelectorAll("[data-bc-sidebar-active]")
-      );
-      activeHeaders.map((x) => {
-        x.removeAttribute("data-bc-sidebar-active");
-      });
-      header.setAttribute("data-bc-sidebar-active", "");
-    }
-    if (container) {
-      span.classList.toggle("bc-tab-parent")
-        span.addEventListener("click", (e) => {
-            this.slide(container)
-            span.classList.toggle("bc-tab-parent-open")
-        })
-        
-        header.appendChild(container);
-        return header
-      }
-    this.activeHeader = header;
-    closeBtn.addEventListener("click", (e) => {
-      const returnFirstHeader = this.headerWrapper.querySelectorAll("div")[0]
-      this.activeComponent.remove();
-      this.activeHeader.remove();
-      this.activeComponent = this.tabNodes[0];
-      this.activeTab(this.tabNodes[0]);
-      returnFirstHeader.setAttribute("data-bc-sidebar-active", "");
-      this.activeHeader = returnFirstHeader;
-    });
-    span.addEventListener("click", (e) => {
-      const headerElement = e.target as HTMLInputElement;
-      const headerId = headerElement.getAttribute("data-id");
-      this.tabNodes.map((x) => {
-        const componentId = x.getAttribute("component-id");
-        if (parseInt(headerId) == parseInt(componentId)) {
-          const activeHeaders = Array.from(
-            this.headerWrapper.querySelectorAll("[data-bc-sidebar-active]")
-          );
-          activeHeaders.map((x) => {
-            x.removeAttribute("data-bc-sidebar-active");
-          });
-          this.activeTab(x);
-          header.setAttribute("data-bc-sidebar-active", "");
-        }
-      });
-    });
-  
-    return header;
-  }
+  )
 
   async initializeComponent(
     activeComponent: Element,
-    id: number
+    id: number,
+    runFlag : boolean,
+    runOnClick: boolean = false
   ): Promise<void> {
+    if(runOnClick && runFlag){
+      await this.owner.processNodesAsync([activeComponent]);
+      return
+    }
     let componentWrapper = document.createElement("div");
     componentWrapper.appendChild(activeComponent);
     componentWrapper.setAttribute("bc-tab-component-wrapper", "");
@@ -192,8 +138,10 @@ export default class TabComponent extends BasisPanelChildComponent {
     this.tabNodes.map((x) => {
       x.setAttribute("bc-tab-active-component", "false");
     });
-    this.activeComponent.setAttribute("bc-tab-active-component", "true");
-    await this.owner.processNodesAsync([activeComponent]);
+    this.activeComponent.setAttribute("bc-tab-active-component", "true");        
+    if(runFlag){
+      await this.owner.processNodesAsync([activeComponent]);
+    }
   }
   activeTab(activeComponent?: Element): void {
     this.tabNodes.map((x) => {
@@ -219,21 +167,23 @@ export default class TabComponent extends BasisPanelChildComponent {
       groupElement.setAttribute("run", "atclient");
       let basisTag = document.createElement("basis");
       basisTag.setAttribute("core", "call");
+      basisTag.setAttribute("method", "get");
       basisTag.setAttribute("url", activeTab.widgetURL);
       basisTag.setAttribute("run", "atclient");
+      basisTag.setAttribute("params" , JSON.stringify(activeTab.params) )
       groupElement.appendChild(basisTag);
-      await this.initializeComponent(groupElement , componentId)
+      await this.initializeComponent(groupElement , componentId,this.runType)
     }
-
     return true;
   }
   public async getOptions(): Promise<void> {
     const settingObject = await this.owner.getAttributeValueAsync("options");
     this.tabComponentOptions = eval(settingObject).tabs;
-    this.tabsSettings = eval(settingObject).tabSettings;
+    this.runType = eval(settingObject).autoRun != undefined ? eval(settingObject).autoRun : true;
   }
   public async initializeAsync(): Promise<void> {
     await this.getOptions();
+
   }
   public slide(el) : void {    
     el.classList.toggle('hideTab');

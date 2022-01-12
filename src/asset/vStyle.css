@@ -2,11 +2,10 @@
 [bc-vertical-tab-container] [bc-tab-header-wrapper]{display: flex; flex-direction: column ;background: #fff;
 background: #fff;}
 [bc-vertical-tab-container] [bc-tab-close-button]{border: none; background: none;}
-[bc-vertical-tab-container] [bc-tab-header]{border-left: 1px solid var(--light_gray);padding: 5px 10px;
-margin-left: 1px;}
+[bc-vertical-tab-container] [bc-tab-header]{border-left: 1px solid var(--light_gray);}
 [bc-vertical-tab-container] [bc-tab-close-button]{margin-right: 5px;}
 [bc-vertical-tab-container] [bc-tab-header]{cursor: pointer;}
-[bc-vertical-tab-container]{ position: relative;height: 100%;}
+[bc-vertical-tab-container]{ position: relative;}
 [bc-vertical-tab-container] .hideTab{
 	height: 0 !important ; 
   }
