@@ -1,4 +1,5 @@
 <title>tab Manager</title>
+
 <script src="https://cdn.basiscore.net/_js/basiscore-2.4.10.min.js"></script>
 <script src="https://cdn.basiscore.net/_js/alasql.min.js"></script>
 <style>
@@ -19,10 +20,12 @@
   [bc-tab-header-wrapper] {
     width: 20%;
   }
-  [data-bc-horizontal-active] {
+  [data-bc-sidebar-active] {
     color: red;
   }
-  [bc-tab-component-wrapper]{margin-top: 50px;}
+  [bc-tab-header-wrapper]{
+    background: #ccc !important;
+  }
 </style>
 <basis
   core="component.bc.horizontalTabManager"
@@ -35,37 +38,88 @@
     settings: {
       "connection.web.callcommand": "http://localhost:3000/",
       "connection.web.fingerfood": "https://basispanel.ir/apicms",
+      "connection.web.accounting" :"https://www.basisfly.com/eshop-test/446B2F31-3BF8-49AA-9FD3-152B55C70E9B",
       "default.dbsource.verb": "post",
       "default.call.verb": "get",
-      "default.dmnid": "4235",
+      "default.dmnid": "4545",
     },
     repositories: {
       "bc.horizontalTabManager": "/basiscore.tabManager.js",
       "bc.verticalTabManager": "/basiscore.tabManager.js",
-      "bc.grid": "/basiscore.grid.component.js",
+      "bc.grid": "http://basispanel.ir/asset/js/basiscore.grid.component.js",
     },
   };
-
+// var mySetting111 =  {
+//     autoRun :false,
+//     tabs: [
+//       {
+//         title: "ویرایش کد صفحه",
+//         widgetURL:
+//           "http://localhost:3000/tab1.html",
+//         active: true,
+//         triggers: [],
+//       },
+//       {
+//         title: "لیست آدرس مجازی",
+//         widgetURL:
+//           "http://localhost:3000/tab2.html",
+//         active: true,
+//         triggers: [],
+//       }
+//       ,
+//       {
+//         title: "خصوصی سازی صفحه",
+//         active: true,
+//         tabs:[
+//         {
+//         title: "محصول",
+//         widgetURL:
+//           "http://localhost:3000/tab3.html",
+//         active: true,
+//         triggers: [],
+//       },
+//       {
+//         title: "مقاله",
+//         widgetURL:
+//           "http://localhost:3000/tab3.html",
+//         active: true,
+//         triggers: [],
+//       }
+//         ]
+//       }
+//     ]
+//   };
   var mySetting111 =  {
+   autoRun :false,
     tabs: [
       {
         title: "لیست تامین‌کننده",
         widgetURL: "http://localhost:3000/tab1.html",
         active: true,
         triggers: [],
-      },     
+        params: {"db.mid" : "1"}
+      },  
       {
-        title: "لیست تجهیزات",
-        widgetURL: "http://localhost:3000/tab2.html",
-        active: false,
-        triggers: ["db.supplieraccessories"],
-      },
+        title: "لیست تامین‌کننده",
+        widgetURL: "http://localhost:3000/tab4.html",
+        active: true,        
+        triggers: [],
+        params: {"db.mid" : "1"}
+      },    
       {
-        title: "برنامه غذایی",
-        widgetURL: "http://localhost:3000/tab3.html",
-        active: false,
-        triggers: ["db.suppliercalendar"],
-      }
+            title: "1نمایش تامین کننده",
+            widgetURL: "http://localhost:3000/tab2.html",
+            active: true,
+            triggers: ["db.supplieraccessories"],
+            params:  {"db.usedforid" : "12554871"}
+          },
+          {
+            title: "2نمایش تامین کننده",
+            widgetURL: "http://localhost:3000/tab3.html",
+            active: true,
+            triggers: ["db.suppliercalendar"],
+            params:  {"db.usedforid" : "1333331"}
+          },
     ],
   };
 </script>

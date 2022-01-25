@@ -1,0 +1,18 @@
+
+
+    
+    <div class="widget_body section-2">
+      
+        <basis core="dbsource" run="atclient" source="accounting" name="db" method="FactorOrders" triggers="object.view"
+        factorid="197074">
+       <member request="list" type="list" name="FactorOrders" preview="true" ></member>
+   </basis>
+        
+        <div class="supplier_resize">
+            <basis core="component.bc.grid" run="atclient" datamembername="db.FactorOrders"  ></basis>
+        </div>
+	
+
+    </div>
+
+</div>
