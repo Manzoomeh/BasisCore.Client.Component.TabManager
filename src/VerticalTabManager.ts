@@ -19,7 +19,7 @@ export default class VerticalTabManager extends TabComponent{
 		const header = document.createElement("div");
 		header.setAttribute("bc-tab-header", "");
 		header.setAttribute("data-bc-sidebar-items", "");
-		this.headerWrapper.setAttribute("style",`height:220px`) 
+		// this.headerWrapper.setAttribute("style",`height:220px`) 
 		const closeBtn = document.createElement("button");
 		const span = document.createElement("span");
 		span.setAttribute("data-id", id.toString());
@@ -102,7 +102,6 @@ export default class VerticalTabManager extends TabComponent{
 			  }
 		  await this.owner.processNodesAsync([activeComponent]);
 		  this.headerWrapper.setAttribute("style",`height:${this.bodyWrapper.clientHeight}px`) 
-		  
 		  return
 		}
 		let componentWrapper = document.createElement("div");
@@ -126,6 +125,23 @@ export default class VerticalTabManager extends TabComponent{
 		  await this.owner.processNodesAsync([activeComponent]);
 		  
 		}
-		this.headerWrapper.setAttribute("style",`height:${this.bodyWrapper.clientHeight}px`) 
+
+		const getBody = this.getParentNode(this.headerWrapper , "data-bc-page-body")		
+		const height = getBody.style.height
+		console.log("ssss", height)
+		this.headerWrapper.setAttribute("style",`height:${height}`) 
+		this.bodyWrapper.setAttribute("style", `height:${height};left:0;top:0`);  
+		// this.bodyWrapper.setAttribute("style",`height:${height}`) 
+		// bc-tab-component-wrapper
+	  }
+	  getParentNode(el, tagName) {
+		while (el && el.parentNode) {
+		  el = el.parentNode;
+		  if (el && el.getAttribute(tagName) == "") {
+			return el;
+		  }
+		}
+		
+		return null;
 	  }
 }

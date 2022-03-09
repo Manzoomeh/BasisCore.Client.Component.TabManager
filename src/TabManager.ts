@@ -39,7 +39,7 @@ export  default abstract class TabComponent extends BasisPanelChildComponent {
     this.bodyWrapper.setAttribute("gs-x", "0");
     this.bodyWrapper.setAttribute("gs-y", "0");
     this.bodyWrapper.setAttribute("gs-h", "6");
-    this.bodyWrapper.setAttribute("style", "left:0;top:0");    
+      
     this.container.appendChild(this.headerWrapper);
     this.container.appendChild(this.bodyWrapper);
     for (var i = 0; i < firstTabs.length; i++) {
