@@ -29,16 +29,16 @@ export default class VerticalTabManager extends TabComponent{
 		closeBtn.setAttribute("bc-tab-close-button", "");
 		header.appendChild(span);
 		if (firstTab == 2) {
-		  header.setAttribute("data-bc-sidebar-active", "");
+		  header.setAttribute("data-bc-tabManager-active", "");
 		} else if (firstTab == 0) {
 		  header.appendChild(closeBtn);
 		  const activeHeaders = Array.from(
-			this.headerWrapper.querySelectorAll("[data-bc-sidebar-active]")
+			this.headerWrapper.querySelectorAll("[data-bc-tabManager-active]")
 		  );
 		  activeHeaders.map((x) => {
-			x.removeAttribute("data-bc-sidebar-active");
+			x.removeAttribute("data-bc-tabManager-active");
 		  });
-		  header.setAttribute("data-bc-sidebar-active", "");
+		  header.setAttribute("data-bc-tabManager-active", "");
 		}
 		if (container) {
 		  span.classList.toggle("bc-tab-parent")
@@ -57,7 +57,7 @@ export default class VerticalTabManager extends TabComponent{
 		  this.activeHeader.remove();
 		  this.activeComponent = this.tabNodes[0];
 		  this.activeTab(this.tabNodes[0]);
-		  returnFirstHeader.setAttribute("data-bc-sidebar-active", "");
+		  returnFirstHeader.setAttribute("data-bc-tabManager-active", "");
 		  this.activeHeader = returnFirstHeader;
 		});
 		span.addEventListener("click", (e) => {
@@ -73,13 +73,13 @@ export default class VerticalTabManager extends TabComponent{
 			const componentId = x.getAttribute("component-id");
 			if (parseInt(headerId) == parseInt(componentId)) {
 			  const activeHeaders = Array.from(
-				this.headerWrapper.querySelectorAll("[data-bc-sidebar-active]")
+				this.headerWrapper.querySelectorAll("[data-bc-tabManager-active]")
 			  );
 			  activeHeaders.map((x) => {
-				x.removeAttribute("data-bc-sidebar-active");
+				x.removeAttribute("data-bc-tabManager-active");
 			  });
 			  this.activeTab(x);
-			  header.setAttribute("data-bc-sidebar-active", "");
+			  header.setAttribute("data-bc-tabManager-active", "");
 			}
 		  });
 		});  

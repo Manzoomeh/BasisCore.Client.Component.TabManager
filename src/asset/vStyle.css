@@ -3,7 +3,7 @@
   background: #fff;}
 [bc-vertical-tab-container] [bc-tab-close-button]{border: none; background: none;}
 [bc-vertical-tab-container] [bc-tab-close-button]{margin-right: 5px;}
-[bc-vertical-tab-container] [bc-tab-header]{cursor: pointer;}
+[bc-vertical-tab-container] [bc-tab-header]{cursor: pointer;padding: 10px 0;}
 [bc-vertical-tab-container]{ position: relative;}
 [bc-vertical-tab-container] .hideTab{
 	height: 0 !important ; 
@@ -13,15 +13,8 @@
   padding: 10px;
 
 }
-[data-bc-sidebar-active]{ position: relative;}
-[data-bc-sidebar-active]:before {
- content: '';
- position: absolute;
- width: 1px;
- left: 0;
- height: 100%;
- background: #004B85;
-}
+[data-bc-tabManager-active]{ position: relative;border-left: 1px solid #004B85;}
+
 [data-bc-sidebar-items] span {
   display: block;
   width: auto;
@@ -47,5 +40,6 @@ text-align: right;
 font-size: 14px;
 background-color: var(--white);
 height: 100%;
-overflow: hidden;
+overflow-y: auto;
+scrollbar-width:thin
 }
