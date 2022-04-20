@@ -21,13 +21,20 @@ export default class VerticalTabManager extends TabComponent{
 		header.setAttribute("data-bc-sidebar-items", "");
 		// this.headerWrapper.setAttribute("style",`height:220px`) 
 		const closeBtn = document.createElement("button");
-		const span = document.createElement("span");
-		span.setAttribute("data-id", id.toString());
+		const div = document.createElement("div");
+		const arrowIcon = document.createElement("span")
+		div.setAttribute("data-id", id.toString());
 		closeBtn.setAttribute("data-id", id.toString());
-		span.textContent = headerText;
+		arrowIcon.innerHTML = `<svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+		<path d="M6.70998 0.70998C6.31998 0.31998 5.68998 0.31998 5.29998 0.70998L0.70998 5.29998C0.31998 5.68998 0.31998 6.31998 0.70998 6.70998L5.29998 11.3C5.68998 11.69 6.31998 11.69 6.70998 11.3C7.09998 10.91 7.09998 10.28 6.70998 9.88998L2.82998 5.99998L6.70998 2.11998C7.09998 1.72998 7.08998 1.08998 6.70998 0.70998Z" fill="#323232"/>
+		</svg>
+		`
+		arrowIcon.setAttribute("bc-tab-arrow-icon" , "")
+		div.textContent = headerText;
+		
 		closeBtn.textContent = "x";
 		closeBtn.setAttribute("bc-tab-close-button", "");
-		header.appendChild(span);
+		header.appendChild(div);
 		if (firstTab == 2) {
 		  header.setAttribute("data-bc-tabManager-active", "");
 		} else if (firstTab == 0) {
@@ -41,10 +48,13 @@ export default class VerticalTabManager extends TabComponent{
 		  header.setAttribute("data-bc-tabManager-active", "");
 		}
 		if (container) {
-		  span.classList.toggle("bc-tab-parent")
-			span.addEventListener("click", (e) => {
+			div.classList.toggle("bc-tab-parent")
+			div.appendChild(arrowIcon)
+			div.classList.add("bc-has-icon")
+			div.addEventListener("click", (e) => {
 				this.slide(container)
-				span.classList.toggle("bc-tab-parent-open")
+				div.classList.toggle("bc-tab-parent-open")
+				arrowIcon.classList.toggle("rotate_down")	
 			})
 			
 			header.appendChild(container);
@@ -60,13 +70,13 @@ export default class VerticalTabManager extends TabComponent{
 		  returnFirstHeader.setAttribute("data-bc-tabManager-active", "");
 		  this.activeHeader = returnFirstHeader;
 		});
-		span.addEventListener("click", (e) => {
+		div.addEventListener("click", (e) => {
 		  const headerElement = e.target as HTMLInputElement;
 		  const headerId = headerElement.getAttribute("data-id");
-		  if(this.runType == false && span.getAttribute("bc-tab-run") == null){
+		  if(this.runType == false && div.getAttribute("bc-tab-run") == null){
 			const activeOneTab = this.bodyWrapper.querySelector(`[component-id="${headerId}"]`).querySelector("basis")
 			this.initializeComponent(activeOneTab, parseInt(headerId) ,true , true);
-			span.setAttribute("bc-tab-run" , "")
+			div.setAttribute("bc-tab-run" , "")
 		  }
 		  
 		  this.tabNodes.map((x) => {
@@ -128,7 +138,6 @@ export default class VerticalTabManager extends TabComponent{
 
 		const getBody = this.getParentNode(this.headerWrapper , "data-bc-page-body")		
 		const height = getBody.style.height
-		console.log("ssss", height)
 		this.headerWrapper.setAttribute("style",`height:${height}`) 
 		this.bodyWrapper.setAttribute("style", `height:${height};left:0;top:0`);  
 		// this.bodyWrapper.setAttribute("style",`height:${height}`) 

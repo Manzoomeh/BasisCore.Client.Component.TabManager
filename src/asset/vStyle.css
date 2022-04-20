@@ -43,3 +43,12 @@ height: 100%;
 overflow-y: auto;
 scrollbar-width:thin
 }
+[bc-tab-arrow-icon]{
+  transition: all 0.2s;
+}
+.rotate_down{
+  transform: rotate(-90deg);
+}
+.bc-has-icon{
+  display: flex; align-items: center; justify-content: space-between;
+}
