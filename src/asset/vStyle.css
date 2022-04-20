@@ -3,7 +3,7 @@
   background: #fff;}
 [bc-vertical-tab-container] [bc-tab-close-button]{border: none; background: none;}
 [bc-vertical-tab-container] [bc-tab-close-button]{margin-right: 5px;}
-[bc-vertical-tab-container] [bc-tab-header]{cursor: pointer;padding: 10px 0;}
+[bc-vertical-tab-container] [bc-tab-header]{cursor: pointer;padding: 10px 15px;}
 [bc-vertical-tab-container]{ position: relative;}
 [bc-vertical-tab-container] .hideTab{
 	height: 0 !important ; 
