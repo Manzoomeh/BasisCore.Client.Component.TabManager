@@ -115,9 +115,15 @@ export default class VerticalTabManager extends TabComponent{
 		  return
 		}
 		let componentWrapper = document.createElement("div");
-		componentWrapper.appendChild(activeComponent);
 		componentWrapper.setAttribute("bc-tab-component-wrapper", "");
 		componentWrapper.setAttribute("component-id", id.toString());
+		
+		const bodyContainer = document.createElement("div");
+		bodyContainer.setAttribute("bc-tab-content-wrapper", "");
+		
+		bodyContainer.appendChild(activeComponent);
+		componentWrapper.appendChild(bodyContainer);
+		
 		this.bodyWrapper.appendChild(componentWrapper);
 		this.tabNodes.push(componentWrapper);
 		this.activeComponent = componentWrapper;
@@ -136,21 +142,22 @@ export default class VerticalTabManager extends TabComponent{
 		  
 		}
 
-		const getBody = this.getParentNode(this.headerWrapper , "data-bc-page-body")		
-		const height = getBody.style.height
-		this.headerWrapper.setAttribute("style",`height:${height}`) 
-		this.bodyWrapper.setAttribute("style", `height:${height};left:0;top:0`);  
+		// const getBody = this.getParentNode(this.headerWrapper , "data-bc-page-body")		
+		// const height = getBody.style.height
+		// this.headerWrapper.setAttribute("style",`height:${height}`) 
+		// this.bodyWrapper.setAttribute("style", `height:${height};left:0;top:0`);  
 		// this.bodyWrapper.setAttribute("style",`height:${height}`) 
 		// bc-tab-component-wrapper
 	  }
-	  getParentNode(el, tagName) {
-		while (el && el.parentNode) {
-		  el = el.parentNode;
-		  if (el && el.getAttribute(tagName) == "") {
-			return el;
-		  }
-		}
+
+	//   getParentNode(el, tagName) {
+	// 	while (el && el.parentNode) {
+	// 	  el = el.parentNode;
+	// 	  if (el && el.getAttribute(tagName) == "") {
+	// 		return el;
+	// 	  }
+	// 	}
 		
-		return null;
-	  }
+	// 	return null;
+	//   }
 }
