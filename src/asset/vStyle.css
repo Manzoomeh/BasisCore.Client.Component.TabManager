@@ -21,7 +21,19 @@
 
 [bc-vertical-tab-container] [bc-tab-header] {
   cursor: pointer;
+  /* padding: 10px 15px; */
+}
+
+[bc-vertical-tab-container] [bc-tab-header] > div {
+  display: block;
+  width: auto;
+  font-size: 14px;
+  padding-right: 10px;
+  overflow-x: visible;
+  color: #212121;
   padding: 10px 15px;
+  cursor: pointer;
+  position: relative;
 }
 
 [bc-vertical-tab-container] {
@@ -46,22 +58,39 @@
 
 [data-bc-tabManager-active] {
   position: relative;
-  border-left: 1px solid #004B85;
+  /* border-left: 1px solid #004B85; */
+}
+
+[data-bc-tabManager-active]:before {
+  content: '';
+  position: absolute;
+  width: 1px;
+  left: 0;
+  height: 100%;
+  background: #004B85;
 }
 
 [data-bc-sidebar-items] span {
-  display: block;
-  width: auto;
-  font-size: 14px;
-  padding-right: 10px;
-  overflow-x: visible;
+  /* display: block; */
+  /* width: auto; */
+  /* font-size: 14px; */
+  /* padding-right: 10px; */
+  /* overflow-x: visible; */
+  /* color: #212121; */
+  /* padding: 10px 15px; */
+  /* cursor: pointer; */
   color: #212121;
-  padding: 10px 15px;
-  cursor: pointer;
+  margin-left: 2px;
+  font-size: 13px;
+  position: absolute;
+  top: 15px;
+  left: 10px;
+  right: unset;
 }
 
 [bc-vertical-tab-container] [bc-tab-header] [bc-tab-header-parent] {
-  margin-top: 10px;
+  /* margin-top: 10px; */
+  padding: 0 !important;
 }
 
 [bc-vertical-tab-container] [bc-tab-header] .hideTab {

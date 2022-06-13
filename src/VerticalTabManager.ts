@@ -16,6 +16,7 @@ export default class VerticalTabManager extends TabComponent{
 		this.bodyWrapper.setAttribute("data-bc-bp-sidebar-container", "");   
 		this.headerWrapper.setAttribute("data-bc-bp-sidebar-container", "");
 		this.headerWrapper.setAttribute("data-bc-sidebar", "");
+		this.headerWrapper.setAttribute("data-sys-sidebar", "");
 		const header = document.createElement("div");
 		header.setAttribute("bc-tab-header", "");
 		header.setAttribute("data-bc-sidebar-items", "");
@@ -24,9 +25,10 @@ export default class VerticalTabManager extends TabComponent{
 		const div = document.createElement("div");
 		const arrowIcon = document.createElement("span")
 		div.setAttribute("data-id", id.toString());
+		div.setAttribute("data-sys-text", "");
 		closeBtn.setAttribute("data-id", id.toString());
 		arrowIcon.innerHTML = `<svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-		<path d="M6.70998 0.70998C6.31998 0.31998 5.68998 0.31998 5.29998 0.70998L0.70998 5.29998C0.31998 5.68998 0.31998 6.31998 0.70998 6.70998L5.29998 11.3C5.68998 11.69 6.31998 11.69 6.70998 11.3C7.09998 10.91 7.09998 10.28 6.70998 9.88998L2.82998 5.99998L6.70998 2.11998C7.09998 1.72998 7.08998 1.08998 6.70998 0.70998Z" fill="#323232"/>
+		<path d="M6.70998 0.70998C6.31998 0.31998 5.68998 0.31998 5.29998 0.70998L0.70998 5.29998C0.31998 5.68998 0.31998 6.31998 0.70998 6.70998L5.29998 11.3C5.68998 11.69 6.31998 11.69 6.70998 11.3C7.09998 10.91 7.09998 10.28 6.70998 9.88998L2.82998 5.99998L6.70998 2.11998C7.09998 1.72998 7.08998 1.08998 6.70998 0.70998Z" fill="#999"/>
 		</svg>
 		`
 		arrowIcon.setAttribute("bc-tab-arrow-icon" , "")
@@ -37,6 +39,8 @@ export default class VerticalTabManager extends TabComponent{
 		header.appendChild(div);
 		if (firstTab == 2) {
 		  header.setAttribute("data-bc-tabManager-active", "");
+		  header.setAttribute("data-bc-sidebar-active", "");
+		  header.setAttribute("data-sys-inherit", "");
 		} else if (firstTab == 0) {
 		  header.appendChild(closeBtn);
 		  const activeHeaders = Array.from(
@@ -44,16 +48,19 @@ export default class VerticalTabManager extends TabComponent{
 		  );
 		  activeHeaders.map((x) => {
 			x.removeAttribute("data-bc-tabManager-active");
+			x.removeAttribute("data-bc-sidebar-active");
 		  });
 		  header.setAttribute("data-bc-tabManager-active", "");
+		  header.setAttribute("data-bc-sidebar-active", "");
+		  header.setAttribute("data-sys-inherit", "");
 		}
 		if (container) {
-			div.classList.toggle("bc-tab-parent")
+			// div.classList.toggle("bc-tab-parent")
 			div.appendChild(arrowIcon)
-			div.classList.add("bc-has-icon")
+			// div.classList.add("bc-has-icon")
 			div.addEventListener("click", (e) => {
 				this.slide(container)
-				div.classList.toggle("bc-tab-parent-open")
+				// div.classList.toggle("bc-tab-parent-open")
 				arrowIcon.classList.toggle("rotate_down")	
 			})
 			
@@ -68,6 +75,8 @@ export default class VerticalTabManager extends TabComponent{
 		  this.activeComponent = this.tabNodes[0];
 		  this.activeTab(this.tabNodes[0]);
 		  returnFirstHeader.setAttribute("data-bc-tabManager-active", "");
+		  returnFirstHeader.setAttribute("data-bc-sidebar-active", "");
+		  returnFirstHeader.setAttribute("data-sys-inherit", "");
 		  this.activeHeader = returnFirstHeader;
 		});
 		div.addEventListener("click", (e) => {
@@ -87,9 +96,12 @@ export default class VerticalTabManager extends TabComponent{
 			  );
 			  activeHeaders.map((x) => {
 				x.removeAttribute("data-bc-tabManager-active");
+				x.removeAttribute("data-bc-sidebar-active");
 			  });
 			  this.activeTab(x);
 			  header.setAttribute("data-bc-tabManager-active", "");
+			  header.setAttribute("data-bc-sidebar-active", "");
+			  header.setAttribute("data-sys-inherit", "");
 			}
 		  });
 		});  
@@ -116,6 +128,7 @@ export default class VerticalTabManager extends TabComponent{
 		}
 		let componentWrapper = document.createElement("div");
 		componentWrapper.setAttribute("bc-tab-component-wrapper", "");
+		componentWrapper.setAttribute("data-sys-widget", "");
 		componentWrapper.setAttribute("component-id", id.toString());
 		
 		const bodyContainer = document.createElement("div");
