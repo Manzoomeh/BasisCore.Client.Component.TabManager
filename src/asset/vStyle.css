@@ -70,15 +70,7 @@
   background: #004B85;
 }
 
-[data-bc-sidebar-items] span {
-  /* display: block; */
-  /* width: auto; */
-  /* font-size: 14px; */
-  /* padding-right: 10px; */
-  /* overflow-x: visible; */
-  /* color: #212121; */
-  /* padding: 10px 15px; */
-  /* cursor: pointer; */
+[data-bc-sidebar-items] span[bc-tab-arrow-icon] {
   color: #212121;
   margin-left: 2px;
   font-size: 13px;
