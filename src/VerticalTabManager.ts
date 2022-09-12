@@ -11,8 +11,10 @@ export default class VerticalTabManager extends TabComponent{
 		headerText: string,
 		id: number,
 		firstTab: number = 0,
-		container?: HTMLElement
+		enable : boolean = true,
+		container? : HTMLElement		
 	  ): Element {
+		 
 		this.bodyWrapper.setAttribute("data-bc-bp-sidebar-container", "");   
 		this.headerWrapper.setAttribute("data-bc-bp-sidebar-container", "");
 		this.headerWrapper.setAttribute("data-bc-sidebar", "");
@@ -20,6 +22,9 @@ export default class VerticalTabManager extends TabComponent{
 		const header = document.createElement("div");
 		header.setAttribute("bc-tab-header", "");
 		header.setAttribute("data-bc-sidebar-items", "");
+		if(enable == false  ){
+			header.setAttribute("data-bc-sidebar-items-disabled", "");
+		}
 		// this.headerWrapper.setAttribute("style",`height:220px`) 
 		const closeBtn = document.createElement("button");
 		const div = document.createElement("div");
@@ -79,32 +84,35 @@ export default class VerticalTabManager extends TabComponent{
 		  returnFirstHeader.setAttribute("data-sys-inherit", "");
 		  this.activeHeader = returnFirstHeader;
 		});
-		div.addEventListener("click", (e) => {
-		  const headerElement = e.target as HTMLInputElement;
-		  const headerId = headerElement.getAttribute("data-id");
-		  if(this.runType == false && div.getAttribute("bc-tab-run") == null){
-			const activeOneTab = this.bodyWrapper.querySelector(`[component-id="${headerId}"]`).querySelector("basis")
-			this.initializeComponent(activeOneTab, parseInt(headerId) ,true , true);
-			div.setAttribute("bc-tab-run" , "")
-		  }
-		  
-		  this.tabNodes.map((x) => {
-			const componentId = x.getAttribute("component-id");
-			if (parseInt(headerId) == parseInt(componentId)) {
-			  const activeHeaders = Array.from(
-				this.headerWrapper.querySelectorAll("[data-bc-tabManager-active]")
-			  );
-			  activeHeaders.map((x) => {
-				x.removeAttribute("data-bc-tabManager-active");
-				x.removeAttribute("data-bc-sidebar-active");
+		if(enable == true){
+			div.addEventListener("click", (e) => {
+			  const headerElement = e.target as HTMLInputElement;
+			  const headerId = headerElement.getAttribute("data-id");
+			  if(this.runType == false && div.getAttribute("bc-tab-run") == null){
+				const activeOneTab = this.bodyWrapper.querySelector(`[component-id="${headerId}"]`).querySelector("basis")
+				this.initializeComponent(activeOneTab, parseInt(headerId) ,true , true);
+				div.setAttribute("bc-tab-run" , "")
+			  }
+			  
+			  this.tabNodes.map((x) => {
+				const componentId = x.getAttribute("component-id");
+				if (parseInt(headerId) == parseInt(componentId)) {
+				  const activeHeaders = Array.from(
+					this.headerWrapper.querySelectorAll("[data-bc-tabManager-active]")
+				  );
+				  activeHeaders.map((x) => {
+					x.removeAttribute("data-bc-tabManager-active");
+					x.removeAttribute("data-bc-sidebar-active");
+				  });
+				  this.activeTab(x);
+				  header.setAttribute("data-bc-tabManager-active", "");
+				  header.setAttribute("data-bc-sidebar-active", "");
+				  header.setAttribute("data-sys-inherit", "");
+				}
 			  });
-			  this.activeTab(x);
-			  header.setAttribute("data-bc-tabManager-active", "");
-			  header.setAttribute("data-bc-sidebar-active", "");
-			  header.setAttribute("data-sys-inherit", "");
-			}
-		  });
-		});  
+			});  
+		}
+		
 		
 		return header;
 	  }

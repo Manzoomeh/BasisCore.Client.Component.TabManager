@@ -1,0 +1,101 @@
+<title>tab Manager</title>
+
+<script src="https://cdn.basiscore.net/_js/basiscore-2.4.10.min.js"></script>
+<script src="https://cdn.basiscore.net/_js/alasql.min.js"></script>
+<style>
+  [bc-tab-header-wrapper] {
+    display: flex;
+    position: relative;
+    background: #fff;
+    width: 80%;
+  }
+
+  [data-bc-widget-inner-container] {
+    overflow-y: scroll !important;
+  }
+  [bc-vertical-tab-container] {
+    display: flex;
+    direction: rtl;
+  }
+  [bc-tab-header-wrapper] {
+    width: 20%;
+  }
+  [data-bc-sidebar-active] {
+    color: red;
+  }
+  [bc-tab-header-wrapper]{
+    background: #ccc !important;
+  }
+</style>
+
+<div data-bc-page-body="" style="height: 569.167px;">
+    <div data-bc-bp-fullpage-container="" gs-x="0" gs-y="0" gs-w="12" gs-h="5" style="height: 562.083px; top: 0px; left: 0px;">
+        <div data-bc-fullpage-container="">
+    <div data-bc-fullpage-inner-container="">
+        <basis
+  core="component.bc.verticalTabManager"
+  run="atclient"
+  options="mySetting111"
+></basis>
+        </div>
+        </div>
+        </div>
+
+        </div>
+
+<script>
+  const host = {
+    settings: {
+      "connection.web.callcommand": "http://localhost:3000/",
+      "connection.web.fingerfood": "https://basispanel.ir/apicms",
+      "default.dbsource.verb": "post",
+      "default.call.verb": "get",
+      "default.dmnid": "4235",
+    },
+    repositories: {
+      "bc.horizontalTabManager": "/basiscore.tabManager.js",
+      "bc.verticalTabManager": "/basiscore.tabManager.js",
+      "bc.grid": "/basiscore.grid.component.js",
+    },
+  };
+
+  var mySetting111 =  {
+   autoRun :true,
+    tabs: [
+      {
+        title: "لیست تامین‌کننده",
+        widgetURL: "http://localhost:3000/tab1.html",
+        active: true,
+        triggers: [],
+        params: {"db.mid" : "1"}
+      },  
+      {
+        title: "لیست تامین‌کننده",
+        widgetURL: "http://localhost:3000/tab1.html",
+        active: true,        
+        triggers: [],
+        params: {"db.mid" : "1"}
+      },    
+      {
+        title: "توضیحات",
+        active: true,
+        tabs: [
+        {
+            title: "1نمایش تامین کننده",
+            widgetURL: "http://localhost:3000/tab2.html",
+            active: true,
+            triggers: ["db.supplieraccessories"],
+            params:  {"db.usedforid" : "12554871"}
+          },
+          {
+            title: "2نمایش تامین کننده",
+            widgetURL: "http://localhost:3000/tab3.html",
+            active: false,
+            triggers: ["db.suppliercalendar"],
+            params:  {"db.usedforid" : "1333331"}
+          },
+        ],
+      },
+    ],
+  };
+</script>

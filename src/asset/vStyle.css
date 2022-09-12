@@ -129,3 +129,6 @@
   align-items: center;
   justify-content: space-between;
 }
+[data-bc-sidebar-items-disabled] div{
+  cursor: no-drop !important;
+}

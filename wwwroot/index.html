@@ -38,6 +38,8 @@
     left: 0;
   }
 </style>
+
+<button bc-triggers="click" name="db.setKey" value="true" >click here</button>
 <basis
   core="component.bc.verticalTabManager"
   run="atclient"
@@ -107,14 +109,16 @@
         widgetURL: "http://localhost:3000/tab1.html",
         active: true,
         triggers: [],
-        params: {"db.mid" : "1"}
+        params: {"db.mid" : "1"},
+        
       },  
       {
         title: "لیست تامین‌کننده",
         widgetURL: "http://localhost:3000/tab1.html",
         active: true,        
         triggers: [],
-        params: {"db.mid" : "1"}
+        params: {"db.mid" : "1"},
+        enable : "false"
       },    
       {
         title: "توضیحات",
@@ -132,7 +136,8 @@
             widgetURL: "http://localhost:3000/tab3.html",
             active: false,
             triggers: ["db.suppliercalendar"],
-            params:  {"db.usedforid" : "1333331"}
+            params:  {"db.usedforid" : "1333331"},
+            enable : "false"
           },
         ],
       },

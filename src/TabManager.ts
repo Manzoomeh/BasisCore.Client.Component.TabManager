@@ -7,7 +7,8 @@ interface ITabOptions {
   active: boolean;
   triggers: string[];
   tabs: ITabOptions[];
-  params : object
+  params : object;
+  enable? : boolean
 }
 
 export  default abstract class TabComponent extends BasisPanelChildComponent {
@@ -45,13 +46,14 @@ export  default abstract class TabComponent extends BasisPanelChildComponent {
     for (var i = 0; i < firstTabs.length; i++) {
       const componentId = Math.floor(Math.random() * 10000);
       const arr: ITabOptions[] = firstTabs[i].tabs ? firstTabs[i].tabs : [];
+
       if (i == 0 && arr.length == 0) {
         this.headerWrapper.appendChild(
-          this.createHeader(firstTabs[i].title, componentId, 2)
+          this.createHeader(firstTabs[i].title, componentId, 2 ,(firstTabs[i].enable != undefined ? firstTabs[i].enable as boolean : true) )
         );
       } else if (arr.length == 0) {
         this.headerWrapper.appendChild(
-          this.createHeader(firstTabs[i].title, componentId, 1)
+          this.createHeader(firstTabs[i].title, componentId, 1,(firstTabs[i].enable != undefined ? firstTabs[i].enable as boolean : true))
         );
       }
       let basisElement = document.createElement("basis");
@@ -70,7 +72,7 @@ export  default abstract class TabComponent extends BasisPanelChildComponent {
         const childWrapper = document.createElement("div");
         childWrapper.setAttribute("bc-tab-header-child", "");
         childWrapper.appendChild(
-          this.createHeader(arr[j].title, componentId, 1)
+          this.createHeader(arr[j].title, componentId, 1 ,(arr[j].enable != undefined ? arr[j].enable as boolean : true))
         );
         parentHeader.appendChild(childWrapper);
         let basisElement = document.createElement("basis");
@@ -88,7 +90,7 @@ export  default abstract class TabComponent extends BasisPanelChildComponent {
         
         if (j == arr.length - 1) {
           this.headerWrapper.appendChild(
-            this.createHeader(firstTabs[i].title, componentId, 3, parentHeader)
+            this.createHeader(firstTabs[i].title, componentId, 3 ,(firstTabs[i].enable != undefined ? firstTabs[i].enable as boolean : true),parentHeader)
           );
         }
       }
@@ -115,6 +117,7 @@ export  default abstract class TabComponent extends BasisPanelChildComponent {
     headerText: string,
     id: number,
     firstTab? : number,
+    enable? : boolean ,
     container?: HTMLElement
   )
 
