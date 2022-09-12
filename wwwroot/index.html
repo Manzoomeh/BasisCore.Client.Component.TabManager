@@ -1,6 +1,6 @@
 <title>tab Manager</title>
 
-<script src="https://cdn.basiscore.net/_js/basiscore-2.4.10.min.js"></script>
+<script src="https://cdn.basiscore.net/_js/basiscore-2.15.2.js?v=4"></script>
 <script src="https://cdn.basiscore.net/_js/alasql.min.js"></script>
 <style>
   [bc-tab-header-wrapper] {
@@ -44,6 +44,8 @@
   core="component.bc.verticalTabManager"
   run="atclient"
   options="mySetting111"
+  if="[##db.setKey.value|(true)##]"
+  triggers="db.setKey"
 ></basis>
 
 <script>
@@ -61,46 +63,7 @@
       "bc.grid": "/basiscore.grid.component.js",
     },
   };
-// var mySetting111 =  {
-//     autoRun :false,
-//     tabs: [
-//       {
-//         title: "ویرایش کد صفحه",
-//         widgetURL:
-//           "http://localhost:3000/tab1.html",
-//         active: true,
-//         triggers: [],
-//       },
-//       {
-//         title: "لیست آدرس مجازی",
-//         widgetURL:
-//           "http://localhost:3000/tab2.html",
-//         active: true,
-//         triggers: [],
-//       }
-//       ,
-//       {
-//         title: "خصوصی سازی صفحه",
-//         active: true,
-//         tabs:[
-//         {
-//         title: "محصول",
-//         widgetURL:
-//           "http://localhost:3000/tab3.html",
-//         active: true,
-//         triggers: [],
-//       },
-//       {
-//         title: "مقاله",
-//         widgetURL:
-//           "http://localhost:3000/tab3.html",
-//         active: true,
-//         triggers: [],
-//       }
-//         ]
-//       }
-//     ]
-//   };
+
   var mySetting111 =  {
    autoRun :true,
     tabs: [
@@ -134,7 +97,7 @@
           {
             title: "2نمایش تامین کننده",
             widgetURL: "http://localhost:3000/tab3.html",
-            active: false,
+            active: "[##db.setKey.value|(false)##]",
             triggers: ["db.suppliercalendar"],
             params:  {"db.usedforid" : "1333331"},
             enable : "false"
