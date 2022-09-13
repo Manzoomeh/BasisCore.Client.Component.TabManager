@@ -39,16 +39,16 @@
   }
 </style>
 
-<button bc-triggers="click" name="db.setKey" value="true" >click here</button>
+<button  name="db.setKey" value="true" onclick="setEnab()" >click here</button>
 <basis
   core="component.bc.verticalTabManager"
   run="atclient"
   options="mySetting111"
-  if="[##db.setKey.value|(true)##]"
-  triggers="db.setKey"
+  triggers="db.run"
 ></basis>
 
 <script>
+
   const host = {
     settings: {
       "connection.web.callcommand": "http://localhost:3000/",
@@ -60,11 +60,11 @@
     repositories: {
       "bc.horizontalTabManager": "/basiscore.tabManager.js",
       "bc.verticalTabManager": "/basiscore.tabManager.js",
-      "bc.grid": "/basiscore.grid.component.js",
+      "grid.grid": "https://cdn.basiscore.net/_js/basiscore.grid.component.js",
     },
   };
-
-  var mySetting111 =  {
+  
+    var mySetting111 =  {
    autoRun :true,
     tabs: [
       {
@@ -77,7 +77,7 @@
       },  
       {
         title: "لیست تامین‌کننده",
-        widgetURL: "http://localhost:3000/tab1.html",
+        widgetURL: "http://localhost:3000/tab2.html",
         active: true,        
         triggers: [],
         params: {"db.mid" : "1"},
@@ -91,19 +91,24 @@
             title: "1نمایش تامین کننده",
             widgetURL: "http://localhost:3000/tab2.html",
             active: true,
-            triggers: ["db.supplieraccessories"],
-            params:  {"db.usedforid" : "12554871"}
+            triggers: [""],
+            params:  {"db.usedforid" : "12554871"},
+            
           },
           {
             title: "2نمایش تامین کننده",
             widgetURL: "http://localhost:3000/tab3.html",
-            active: "[##db.setKey.value|(false)##]",
-            triggers: ["db.suppliercalendar"],
+            active: true,
+            triggers: ["db.run"],
             params:  {"db.usedforid" : "1333331"},
-            enable : "false"
+            
           },
         ],
       },
     ],
   };
+  
+ 
+
 </script>
+

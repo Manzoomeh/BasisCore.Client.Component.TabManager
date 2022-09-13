@@ -8,7 +8,7 @@ interface ITabOptions {
   triggers: string[];
   tabs: ITabOptions[];
   params : object;
-  enable? : boolean
+  enable? : string
 }
 
 export  default abstract class TabComponent extends BasisPanelChildComponent {
@@ -22,10 +22,14 @@ export  default abstract class TabComponent extends BasisPanelChildComponent {
   protected firstTabInitialize = false;
   constructor(owner: IUserDefineComponent, container) {
     super(owner, layout, container);
+  
+
   }
   async createBody(): Promise<void> {
+    this.container.innerHTML =""
     let triggersArray: string[] = [];
     const firstTabs: ITabOptions[] = [];
+
     this.tabComponentOptions.find(function (element) {
       if (element.active == true) {
         firstTabs.push(element);
@@ -49,11 +53,11 @@ export  default abstract class TabComponent extends BasisPanelChildComponent {
 
       if (i == 0 && arr.length == 0) {
         this.headerWrapper.appendChild(
-          this.createHeader(firstTabs[i].title, componentId, 2 ,(firstTabs[i].enable != undefined ? firstTabs[i].enable as boolean : true) )
+          this.createHeader(firstTabs[i].title, componentId, 2 ,(firstTabs[i].enable != undefined ? firstTabs[i].enable  : "true") )
         );
       } else if (arr.length == 0) {
         this.headerWrapper.appendChild(
-          this.createHeader(firstTabs[i].title, componentId, 1,(firstTabs[i].enable != undefined ? firstTabs[i].enable as boolean : true))
+          this.createHeader(firstTabs[i].title, componentId, 1,(firstTabs[i].enable != undefined ? firstTabs[i].enable  : "true"))
         );
       }
       let basisElement = document.createElement("basis");
@@ -72,7 +76,7 @@ export  default abstract class TabComponent extends BasisPanelChildComponent {
         const childWrapper = document.createElement("div");
         childWrapper.setAttribute("bc-tab-header-child", "");
         childWrapper.appendChild(
-          this.createHeader(arr[j].title, componentId, 1 ,(arr[j].enable != undefined ? arr[j].enable as boolean : true))
+          this.createHeader(arr[j].title, componentId, 1 ,(arr[j].enable != undefined ? arr[j].enable  : "true"))
         );
         parentHeader.appendChild(childWrapper);
         let basisElement = document.createElement("basis");
@@ -90,7 +94,7 @@ export  default abstract class TabComponent extends BasisPanelChildComponent {
         
         if (j == arr.length - 1) {
           this.headerWrapper.appendChild(
-            this.createHeader(firstTabs[i].title, componentId, 3 ,(firstTabs[i].enable != undefined ? firstTabs[i].enable as boolean : true),parentHeader)
+            this.createHeader(firstTabs[i].title, componentId, 3 ,(firstTabs[i].enable != undefined ? firstTabs[i].enable  : "true"),parentHeader)
           );
         }
       }
@@ -117,7 +121,7 @@ export  default abstract class TabComponent extends BasisPanelChildComponent {
     headerText: string,
     id: number,
     firstTab? : number,
-    enable? : boolean ,
+    enable? : string ,
     container?: HTMLElement
   )
 
@@ -154,38 +158,43 @@ export  default abstract class TabComponent extends BasisPanelChildComponent {
     this.activeComponent = activeComponent;
   }
   async runAsync(source?): Promise<any> {
-    if (!this.firstTabInitialize) {
-      await this.createBody();
-      this.firstTabInitialize = true;
-    } else if (source) {
-      const componentId = Math.floor(Math.random() * 10000);
-      const activeTab = this.tabComponentOptions.find((element) =>
-        element.triggers.find((element1) => element1 == source._id)
-      );
-      this.headerWrapper.appendChild(
-        this.createHeader(activeTab.title, componentId)
-      );
-      let groupElement = document.createElement("basis");
-      groupElement.setAttribute("core", "group");
-      groupElement.setAttribute("run", "atclient");
-      let basisTag = document.createElement("basis");
-      basisTag.setAttribute("core", "call");
-      basisTag.setAttribute("method", "get");
-      basisTag.setAttribute("url", activeTab.widgetURL);
-      basisTag.setAttribute("run", "atclient");
-      basisTag.setAttribute("params" , JSON.stringify(activeTab.params) )
-      groupElement.appendChild(basisTag);
-      await this.initializeComponent(groupElement , componentId,this.runType)
-    }
+    await this.getOptions();
+    await this.createBody();
+    this.firstTabInitialize = true;
+    // if (!this.firstTabInitialize) {
+    //   await this.createBody();
+    //   // this.firstTabInitialize = true;
+    // } else if (source) {
+    //   const componentId = Math.floor(Math.random() * 10000);
+    //   const activeTab = this.tabComponentOptions.find((element) =>{
+    //     element.triggers.find((element1) => element1 == source._id)
+    //   }
+    //   );
+    //   this.headerWrapper.appendChild(
+    //     this.createHeader(activeTab.title, componentId)
+    //   );
+    //   let groupElement = document.createElement("basis");
+    //   groupElement.setAttribute("core", "group");
+    //   groupElement.setAttribute("run", "atclient");
+    //   let basisTag = document.createElement("basis");
+    //   basisTag.setAttribute("core", "call");
+    //   basisTag.setAttribute("method", "get");
+    //   basisTag.setAttribute("url", activeTab.widgetURL);
+    //   basisTag.setAttribute("run", "atclient");
+    //   basisTag.setAttribute("params" , JSON.stringify(activeTab.params) )
+    //   groupElement.appendChild(basisTag);
+    //   await this.initializeComponent(groupElement , componentId,this.runType)
+    // }
     return true;
   }
   public async getOptions(): Promise<void> {
+    this.tabComponentOptions = []
     const settingObject = await this.owner.getAttributeValueAsync("options");
     this.tabComponentOptions = eval(settingObject).tabs;
     this.runType = eval(settingObject).autoRun != undefined ? eval(settingObject).autoRun : true;
   }
   public async initializeAsync(): Promise<void> {
-    await this.getOptions();
+    // await this.getOptions();
 
   }
   public slide(el) : void {    

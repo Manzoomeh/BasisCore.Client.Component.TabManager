@@ -11,10 +11,9 @@ export default class VerticalTabManager extends TabComponent{
 		headerText: string,
 		id: number,
 		firstTab: number = 0,
-		enable : boolean = true,
+		enable : string = "true",
 		container? : HTMLElement		
 	  ): Element {
-		 
 		this.bodyWrapper.setAttribute("data-bc-bp-sidebar-container", "");   
 		this.headerWrapper.setAttribute("data-bc-bp-sidebar-container", "");
 		this.headerWrapper.setAttribute("data-bc-sidebar", "");
@@ -22,7 +21,7 @@ export default class VerticalTabManager extends TabComponent{
 		const header = document.createElement("div");
 		header.setAttribute("bc-tab-header", "");
 		header.setAttribute("data-bc-sidebar-items", "");
-		if(enable == false  ){
+		if( enable === "false"  ){
 			header.setAttribute("data-bc-sidebar-items-disabled", "");
 		}
 		// this.headerWrapper.setAttribute("style",`height:220px`) 
@@ -84,7 +83,7 @@ export default class VerticalTabManager extends TabComponent{
 		  returnFirstHeader.setAttribute("data-sys-inherit", "");
 		  this.activeHeader = returnFirstHeader;
 		});
-		if(enable == true){
+		if(enable == "true"){
 			div.addEventListener("click", (e) => {
 			  const headerElement = e.target as HTMLInputElement;
 			  const headerId = headerElement.getAttribute("data-id");

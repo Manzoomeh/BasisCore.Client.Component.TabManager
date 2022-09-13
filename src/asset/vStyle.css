@@ -132,3 +132,6 @@
 [data-bc-sidebar-items-disabled] div{
   cursor: no-drop !important;
 }
+[data-bc-sidebar-items-disabled] div{
+   color: #767676 !important;
+}

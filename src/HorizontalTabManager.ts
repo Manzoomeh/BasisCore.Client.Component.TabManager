@@ -12,7 +12,7 @@ export default class HorizontalTabManager extends TabComponent{
 		headerText: string,
 		id: number,
 		firstTab: number = 0,
-		enable : boolean = true,
+		enable : string = "true",
 		container?: HTMLElement
 	  ): Element {
 		const header = document.createElement("div");
